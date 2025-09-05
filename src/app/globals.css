@@ -115,22 +115,6 @@ body {
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1f2937; 
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-secondary);
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -146,4 +130,15 @@ body {
 button:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+
+img[alt="Mira Visions Logo"] {
+  transition: filter 0.5s ease-in-out !important;
+}
+
+.logo-container {
+  min-height: 48px; 
+  display: flex;
+  align-items: center;
 }

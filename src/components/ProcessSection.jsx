@@ -2,8 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const ProcessSection = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   const [activeStep, setActiveStep] = useState(0);
   const [isHovered, setIsHovered] = useState(null);
   const intervalRef = useRef(null);
@@ -37,34 +41,42 @@ const ProcessSection = () => {
         </svg>
       ),
       visual: (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-xl border border-gray-100 dark:border-gray-700 h-32 flex flex-col justify-center">
+        <div className={`rounded-xl p-4 shadow-xl border h-32 flex flex-col justify-center ${
+          isDark 
+            ? 'bg-gray-800 border-gray-700' 
+            : 'bg-white border-gray-100'
+        }`}>
           <div className="flex items-start space-x-3 mb-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-lime-400 to-lime-500 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">M</div>
-            <div className="h-7 flex justify-center items-center bg-lime-400 rounded-lg px-2 py-1 flex-1 shadow-sm">
-              <p className="text-xs text-black font-medium">Tell me about your vision</p>
+            <div className="w-6 h-6 bg-gradient-to-br from-green-600 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">M</div>
+            <div className="h-7 flex justify-center items-center bg-green-600 rounded-lg px-2 py-1 flex-1 shadow-sm">
+              <p className="text-xs text-white font-medium">Tell me about your vision</p>
             </div>
           </div>
           <div className="flex items-start flex-row-reverse space-x-3 space-x-reverse">
-            <div className="w-6 h-6  bg-gray-200 dark:text-gray-700 text-text-gray-700 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">Y</div>
-            <div className="h-7 flex justify-center items-center bg-gray-200 dark:bg-gray-200 rounded-lg px-2 py-1 flex-1 shadow-sm">
-              <p className="text-xs text-black dark:text-black">I need modern design...</p>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm ${
+              isDark ? 'bg-gray-200 text-gray-700' : 'bg-gray-200 text-gray-700'
+            }`}>Y</div>
+            <div className={`h-7 flex justify-center items-center rounded-lg px-2 py-1 flex-1 shadow-sm ${
+              isDark ? 'bg-gray-200' : 'bg-gray-200'
+            }`}>
+              <p className="text-xs text-black">I need modern design...</p>
             </div>
           </div>
           <div className="mt-4 flex space-x-1 justify-center">
             <motion.div
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1.5, repeat: Infinity, delay: 0 }}
-              className="w-1 h-1 bg-lime-400 rounded-full"
+              className="w-1 h-1 bg-green-600 rounded-full"
             />
             <motion.div
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
-              className="w-1 h-1 bg-lime-400 rounded-full"
+              className="w-1 h-1 bg-green-600 rounded-full"
             />
             <motion.div
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1.5, repeat: Infinity, delay: 0.6 }}
-              className="w-1 h-1 bg-lime-400 rounded-full"
+              className="w-1 h-1 bg-green-600 rounded-full"
             />
           </div>
         </div>
@@ -79,29 +91,53 @@ const ProcessSection = () => {
         </svg>
       ),
       visual: (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-xl border border-gray-100 dark:border-gray-700 h-32 flex flex-col justify-center">
+        <div className={`rounded-xl p-4 shadow-xl border h-32 flex flex-col justify-center ${
+          isDark 
+            ? 'bg-gray-800 border-gray-700' 
+            : 'bg-white border-gray-100'
+        }`}>
           <div className="grid grid-cols-3 gap-2 mb-2">
             <motion.div 
-              className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700 rounded-sm shadow-sm"
+              className={`h-4 rounded shadow-sm ${
+                isDark 
+                  ? 'bg-gradient-to-r from-gray-600 to-gray-700' 
+                  : 'bg-gradient-to-r from-gray-200 to-gray-300'
+              }`}
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity, delay: 0 }}
             />
             <motion.div 
-              className="h-4 bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-700 dark:to-gray-600 rounded-sm shadow-sm"
+              className={`h-4 rounded shadow-sm ${
+                isDark 
+                  ? 'bg-gradient-to-r from-gray-700 to-gray-600' 
+                  : 'bg-gradient-to-r from-gray-300 to-gray-400'
+              }`}
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
             />
             <motion.div 
-              className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700 rounded-sm shadow-sm"
+              className={`h-4 rounded shadow-sm ${
+                isDark 
+                  ? 'bg-gradient-to-r from-gray-600 to-gray-700' 
+                  : 'bg-gradient-to-r from-gray-200 to-gray-300'
+              }`}
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
             />
           </div>
           <motion.div 
-            className="h-6 bg-gradient-to-r from-lime-200 via-lime-300 to-lime-200 dark:from-lime-800/50 dark:via-lime-700/50 dark:to-lime-800/50 rounded-md mb-2 shadow-sm relative overflow-hidden"
+            className={`h-6 rounded-md mb-2 shadow-sm relative overflow-hidden ${
+              isDark 
+                ? 'bg-gradient-to-r from-green-800/50 via-green-700/50 to-green-800/50' 
+                : 'bg-gradient-to-r from-green-200 via-green-300 to-green-200'
+            }`}
           >
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-white/10 to-transparent w-8"
+              className={`absolute inset-0 w-8 ${
+                isDark 
+                  ? 'bg-gradient-to-r from-transparent via-white/10 to-transparent' 
+                  : 'bg-gradient-to-r from-transparent via-white/40 to-transparent'
+              }`}
               animate={{ x: [-32, 120] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -110,18 +146,24 @@ const ProcessSection = () => {
             {[0, 1, 2, 3].map((i) => (
               <motion.div 
                 key={i}
-                className="h-3 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700 rounded-sm shadow-sm"
+                className={`h-3 rounded shadow-sm ${
+                  isDark 
+                    ? 'bg-gradient-to-r from-gray-600 to-gray-700' 
+                    : 'bg-gradient-to-r from-gray-200 to-gray-300'
+                }`}
                 animate={{ scaleY: [0.8, 1, 0.8] }}
                 transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
               />
             ))}
           </div>
-          <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center font-medium flex items-center justify-center space-x-1">
+          <div className={`mt-2 text-xs text-center font-medium flex items-center justify-center space-x-1 ${
+            isDark ? 'text-gray-400' : 'text-gray-500'
+          }`}>
             <span>Wireframe Draft</span>
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="w-2 h-2 border border-lime-400 rounded-full"
+              className="w-2 h-2 border border-green-600 rounded-full"
             />
           </div>
         </div>
@@ -136,11 +178,13 @@ const ProcessSection = () => {
         </svg>
       ),
       visual: (
-        <div className="bg-gradient-to-br from-lime-400 via-lime-500 to-emerald-500 rounded-xl p-4 shadow-xl h-32 flex items-center justify-center relative overflow-hidden">
+        <div className="bg-gradient-to-br from-green-600 via-green-600 to-emerald-600 rounded-xl p-4 shadow-xl h-32 flex items-center justify-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
           <div className="absolute top-2 left-2 w-2 h-2 bg-white/30 rounded-full animate-pulse" />
           <div className="absolute bottom-2 right-2 w-3 h-3 border border-white/30 rounded-full" />
-          <div className="bg-white dark:bg-gray-800 backdrop-blur-sm rounded-lg p-3 w-full h-full flex flex-col shadow-lg border border-white/20">
+          <div className={`backdrop-blur-sm rounded-lg p-3 w-full h-full flex flex-col shadow-lg border border-white/20 ${
+            isDark ? 'bg-gray-800' : 'bg-white'
+          }`}>
             <div className="flex items-center justify-between mb-2">
               <div className="flex space-x-1">
                 <motion.div 
@@ -161,19 +205,23 @@ const ProcessSection = () => {
               </div>
 							
 							<motion.div 
-								className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700 rounded-sm shadow-sm text-xs text-white font-mono bg-gray-100 px-1 rounded"
+								className={`h-4 rounded shadow-sm text-xs text-white font-mono bg-gray-100 px-1 ${
+                  isDark 
+                    ? 'bg-gradient-to-r from-gray-600 to-gray-700' 
+                    : 'bg-gradient-to-r from-gray-200 to-gray-300'
+                }`}
 								animate={{ opacity: [0.5, 1, 0.5] }}
 								transition={{ duration: 2, repeat: Infinity, delay: 0 }}
 							>live-site.com
 							</motion.div>
             </div>
             <motion.div 
-              className="flex justify-center items-center h-8 bg-gradient-to-r from-lime-400 via-emerald-400 to-lime-500 rounded-md mb-2 flex items-center justify-center relative overflow-hidden shadow-sm"
+              className="h-8 bg-gradient-to-r from-green-600 via-emerald-600 to-green-600 rounded-md mb-2 flex items-center justify-center relative overflow-hidden shadow-sm"
               animate={{ 
                 backgroundImage: [
-                  'linear-gradient(90deg, #a3e635, #34d399, #a3e635)',
-                  'linear-gradient(90deg, #34d399, #10b981, #34d399)',
-                  'linear-gradient(90deg, #a3e635, #34d399, #a3e635)'
+                  'linear-gradient(90deg, #059669, #10b981, #059669)',
+                  'linear-gradient(90deg, #10b981, #047857, #10b981)',
+                  'linear-gradient(90deg, #059669, #10b981, #059669)'
                 ]
               }}
               transition={{ duration: 3, repeat: Infinity }}
@@ -215,7 +263,11 @@ const ProcessSection = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 lg:py-28 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+    <section className={`py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden ${
+      isDark 
+        ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+        : 'bg-gradient-to-tr from-white to-slate-200'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -224,14 +276,26 @@ const ProcessSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12 sm:mb-16"
         >
-					<div className="inline-flex items-center gap-2 bg-lime-500/10 border border-lime-500/20 rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6">
-            <div className="w-2 h-2 bg-lime-500 rounded-full animate-pulse"></div>
-            <span className="text-lime-600 dark:text-lime-400 text-xs sm:text-sm font-medium">WORKFLOW</span>
+					<div className={`inline-flex items-center gap-2 rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6 ${
+            isDark 
+              ? 'bg-green-600/10 border border-green-600/20' 
+              : 'bg-green-600/10 border border-green-600/20'
+          }`}>
+            <div className={`w-2 h-2 rounded-full animate-pulse ${
+              isDark ? 'bg-green-600' : 'bg-green-600'
+            }`}></div>
+            <span className={`text-xs sm:text-sm font-medium ${
+              isDark ? 'text-green-400' : 'text-green-600'
+            }`}>WORKFLOW</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
+          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
             From Idea to Reality
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
+          <p className={`text-lg sm:text-xl max-w-2xl mx-auto px-2 ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Our proven process transforms your vision into stunning results
           </p>
         </motion.div>
@@ -254,8 +318,10 @@ const ProcessSection = () => {
                   <motion.div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                       activeStep === index || isHovered === index
-                        ? 'bg-gradient-to-br from-lime-400 to-lime-500 text-gray-900 scale-110 shadow-lg'
-                        : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-600'
+                        ? 'bg-gradient-to-br from-green-600 to-green-600 text-white scale-110 shadow-lg'
+                        : isDark
+                          ? 'bg-gray-700 text-gray-300 border-2 border-gray-600'
+                          : 'bg-white text-gray-600 border-2 border-gray-200'
                     }`}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
@@ -265,12 +331,18 @@ const ProcessSection = () => {
                 </div>
 
                 <motion.div
-                  className={`pt-6 sm:pt-8 pb-8 sm:pb-10 px-4 sm:px-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg transition-all duration-300 border-2 h-80 sm:h-96 flex flex-col ${
+                  className={`pt-6 sm:pt-8 pb-8 sm:pb-10 px-4 sm:px-6 rounded-2xl shadow-lg transition-all duration-300 border-2 h-80 sm:h-96 flex flex-col ${
                     activeStep === index
-                      ? 'border-lime-400 shadow-xl bg-gradient-to-b from-lime-50/50 to-white dark:from-lime-950/10 dark:to-gray-900'
+                      ? isDark
+                        ? 'border-green-600 shadow-xl bg-gradient-to-b from-green-950/10 to-gray-900'
+                        : 'border-green-600 shadow-xl bg-gradient-to-b from-green-50/50 to-white'
                       : isHovered === index
-                      ? 'border-lime-300 shadow-xl'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-lime-200 dark:hover:border-lime-600'
+                      ? isDark
+                        ? 'border-green-600 shadow-xl bg-gray-900'
+                        : 'border-green-600 shadow-xl bg-white'
+                      : isDark
+                        ? 'border-gray-700 hover:border-green-600 bg-gray-900'
+                        : 'border-gray-200 hover:border-green-600 bg-white'
                   }`}
                   whileHover={{ y: -5 }}
                   animate={{ 
@@ -288,8 +360,8 @@ const ProcessSection = () => {
                   <motion.div 
                     className={`text-xl mb-4 sm:mb-6 flex-shrink-0 transition-colors duration-300 flex justify-center items-center h-8 ${
                       activeStep === index 
-                        ? 'text-lime-600 dark:text-lime-400' 
-                        : 'text-gray-600 dark:text-gray-400'
+                        ? isDark ? 'text-green-400' : 'text-green-600'
+                        : isDark ? 'text-gray-400' : 'text-gray-600'
                     }`}
                     animate={{ 
                       scale: activeStep === index ? 1.1 : 1,
@@ -300,14 +372,16 @@ const ProcessSection = () => {
                   </motion.div>
                   
                   <div className="flex-grow flex flex-col justify-center mb-4">
-                    <h3 className={`text-lg sm:text-xl font-bold  sm:mb-4 transition-colors duration-300 ${
+                    <h3 className={`text-lg sm:text-xl font-bold sm:mb-4 transition-colors duration-300 ${
                       activeStep === index 
-                        ? 'text-lime-700 dark:text-lime-400' 
-                        : 'text-gray-900 dark:text-white'
+                        ? isDark ? 'text-green-400' : 'text-green-700'
+                        : isDark ? 'text-white' : 'text-gray-900'
                     }`}>
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed px-1">
+                    <p className={`text-sm sm:text-base leading-relaxed px-1 ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
                       {step.description}
                     </p>
                   </div>
@@ -318,10 +392,10 @@ const ProcessSection = () => {
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0 }}
-                        className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-br from-lime-400 to-lime-500 rounded-full shadow-md"
+                        className="absolute top-2 right-2 w-3 h-3 bg-gradient-to-br from-green-600 to-green-600 rounded-full shadow-md"
                       >
                         <motion.div
-                          className="absolute inset-0 bg-lime-300 rounded-full"
+                          className="absolute inset-0 bg-green-500 rounded-full"
                           animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
                         />
@@ -333,7 +407,9 @@ const ProcessSection = () => {
                 {index < steps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 left-full transform -translate-y-1/2 -translate-x-1/2 z-0" style={{ left: 'calc(100% + 2rem)' }}>
                     <motion.svg 
-                      className="w-8 h-8 text-lime-400/60" 
+                      className={`w-8 h-8 ${
+                        isDark ? 'text-green-600/60' : 'text-green-600/60'
+                      }`}
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -352,7 +428,9 @@ const ProcessSection = () => {
                 {index < steps.length - 1 && (
                   <div className="lg:hidden flex justify-center mt-4 sm:mt-6">
                     <motion.svg 
-                      className="w-8 h-8 text-lime-400/60" 
+                      className={`w-8 h-8 ${
+                        isDark ? 'text-green-600/60' : 'text-green-600/60'
+                      }`}
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -372,20 +450,30 @@ const ProcessSection = () => {
           </div>
 
           <div className="flex justify-center mt-8 sm:mt-12">
-            <div className="flex items-center space-x-2 sm:space-x-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
+            <div className={`flex items-center space-x-2 sm:space-x-3 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-lg border ${
+              isDark 
+                ? 'bg-gray-800/80 border-gray-600/50' 
+                : 'bg-white/80 border-gray-200/50'
+            }`}>
               {steps.map((step, index) => (
                 <button
                   key={index}
                   onClick={() => handleStepClick(index)}
                   className={`cursor-pointer transition-all duration-300 rounded-full flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 ${
                     activeStep === index 
-                      ? 'bg-gradient-to-r from-lime-400 to-lime-500 text-gray-900 shadow-md' 
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                      ? 'bg-gradient-to-r from-green-600 to-green-600 text-white shadow-md' 
+                      : isDark
+                        ? 'hover:bg-gray-700 text-gray-400'
+                        : 'hover:bg-gray-100 text-gray-600'
                   }`}
                 >
                   <motion.div
                     className={`rounded-full transition-all duration-300 ${
-                      activeStep === index ? 'bg-gray-900/20 w-4 sm:w-6 h-1' : 'bg-gray-300 dark:bg-gray-600 w-2 h-2'
+                      activeStep === index 
+                        ? 'bg-white/20 w-4 sm:w-6 h-1' 
+                        : isDark
+                          ? 'bg-gray-600 w-2 h-2'
+                          : 'bg-gray-300 w-2 h-2'
                     }`}
                     layout
                   />

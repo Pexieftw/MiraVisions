@@ -1,7 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Ruler, Lightbulb, Rocket, Palette, Paintbrush, Zap, Target, Globe, Smartphone, Sparkles, Monitor } from 'lucide-react';
 
 const Hero = ({ isLoaded = true }) => {
+  const { theme } = useTheme();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -14,34 +17,63 @@ const Hero = ({ isLoaded = true }) => {
   const canvasRef = useRef(null);
   const dragStartRef = useRef({ x: 0, y: 0 });
 
+  const isDark = theme === 'dark';
+
   const projects = [
     {
       type: 'Website',
       title: 'E-commerce Platform',
       colors: ['rgb(var(--lime-400))', 'rgb(var(--green-500))', 'rgb(var(--emerald-500))'],
       elements: ['header', 'hero', 'products', 'footer'],
-      icon: '🌐'
+      icon: <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
     },
     {
       type: 'Mobile App',
       title: 'Creative Studio App',
       colors: ['rgb(var(--green-500))', 'rgb(var(--emerald-500))', 'rgb(var(--cyan-500))'],
       elements: ['navbar', 'dashboard', 'gallery', 'profile'],
-      icon: '📱'
+      icon: <Smartphone className="w-4 h-4 sm:w-5 sm:h-5" />
     },
     {
       type: 'Brand Identity',
       title: 'Luxury Brand Suite',
       colors: ['rgb(var(--emerald-500))', 'rgb(var(--cyan-500))', 'rgb(var(--blue-500))'],
       elements: ['logo', 'colors', 'typography', 'assets'],
-      icon: '✨'
+      icon: <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
     },
     {
       type: 'UI/UX Design',
       title: 'SaaS Dashboard',
       colors: ['rgb(var(--cyan-500))', 'rgb(var(--blue-500))', 'rgb(var(--violet-500))'],
       elements: ['sidebar', 'analytics', 'widgets', 'controls'],
-      icon: '🎨'
+      icon: <Monitor className="w-4 h-4 sm:w-5 sm:h-5" />
+    }
+  ];
+
+  const floatingElements = [
+    {
+      Icon: Ruler,
+      position: { right: isMobile ? '-15px' : '-60px', top: isMobile ? '15px' : '40px' },
+      transform: `translateZ(20px) rotateY(${-time * 15}deg)`,
+      color: 'text-blue-500'
+    },
+    {
+      Icon: Lightbulb,
+      position: { left: isMobile ? '-15px' : '-50px', bottom: isMobile ? '15px' : '30px' },
+      transform: `translateZ(25px) rotateY(${time * 10}deg)`,
+      color: 'text-yellow-500'
+    },
+    {
+      Icon: Rocket,
+      position: { right: isMobile ? '-15px' : '-50px', bottom: isMobile ? '40px' : '60px' },
+      transform: `translateZ(15px) rotateY(${-time * 25}deg)`,
+      color: 'text-purple-500'
+    },
+    {
+      Icon: Palette,
+      position: { left: isMobile ? '-15px' : '-50px', top: isMobile ? '15px' : '40px' },
+      transform: `translateZ(30px) rotateY(${time * 20}deg)`,
+      color: 'text-pink-500'
     }
   ];
 
@@ -159,8 +191,8 @@ const Hero = ({ isLoaded = true }) => {
         this.decay = Math.random() * 0.01 + 0.005;
         this.size = Math.random() * 2 + 1;
         this.color = Math.random() > 0.5 
-          ? 'rgba(163, 230, 53,' 
-          : 'rgba(34, 197, 94,';
+          ? (isDark ? 'rgba(163, 230, 53,' : 'rgba(34, 197, 94,')
+          : (isDark ? 'rgba(34, 197, 94,' : 'rgba(16, 185, 129,');
       }
 
       update() {
@@ -215,7 +247,7 @@ const Hero = ({ isLoaded = true }) => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isMobile]);
+  }, [isMobile, isDark]);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -229,7 +261,11 @@ const Hero = ({ isLoaded = true }) => {
   return (
     <section 
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-slate-50 to-slate-200 dark:from-black dark:via-gray-900 dark:to-gray-800 transition-colors duration-300"
+      className={`relative min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-300 ${
+        isDark 
+          ? 'bg-gradient-to-br from-slate-900 to-slate-800'
+          : 'bg-gradient-to-br from-white to-slate-200'
+      }`}
       onMouseUp={handleInteractionEnd}
       onTouchEnd={handleInteractionEnd}
     >
@@ -238,31 +274,36 @@ const Hero = ({ isLoaded = true }) => {
         className="absolute inset-0 pointer-events-none opacity-40"
       />
 
+      {/* grid */}
       <div 
-        className="absolute inset-0 opacity-[0.08] dark:opacity-[0.02]"
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.04]' : 'opacity-[0.08]'}`}
         style={{
           backgroundImage: `
-            linear-gradient(rgba(163, 230, 53, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(163, 230, 53, 0.3) 1px, transparent 1px)
+            linear-gradient(rgba(34, 197, 94, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34, 197, 94, 0.5) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px'
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center min-h-screen py-12 sm:py-16 lg:py-20 gap-8 lg:gap-16">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center min-h-screen py-12 sm:py-16 lg:py-20 gap-8 lg:gap-16 w-full">
           
           <div className="lg:w-1/2 text-center lg:text-left space-y-6 sm:space-y-8 lg:space-y-10">
             
             <div 
-              className={`inline-flex items-center relative px-4 py-2 sm:px-6 sm:py-3 lg:px-6 lg:py-3 mb-4 sm:mb-6 lg:mb-6 group ${
+              className={`mt-4 inline-flex items-center relative px-4 py-2 sm:px-6 sm:py-3 lg:px-6 lg:py-3 mb-4 sm:mb-6 lg:mb-6 group ${
                 isLoaded ? 'opacity-0 translate-y-5 animate-[badge-slide_0.8s_ease-out_0.2s_both]' : 'opacity-0'
               }`}
             >
-              <div className="absolute inset-0 rounded-full backdrop-blur-xl bg-gradient-to-r from-lime-400/10 via-emerald-500/10 to-lime-400/10 border border-lime-400/30 transition-opacity duration-300 group-hover:opacity-80" />
+              <div className={`absolute inset-0 rounded-full backdrop-blur-xl bg-gradient-to-r border transition-opacity duration-300 group-hover:opacity-80 ${
+                isDark 
+                  ? 'from-lime-400/10 via-emerald-500/10 to-lime-400/10 border-lime-400/30'
+                  : 'from-green-500/10 via-emerald-500/10 to-green-600/10 border-green-500/40'
+              }`} />
               <div className="relative flex items-center">
-                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-lime-400 rounded-full mr-2 sm:mr-3 lg:mr-3 animate-pulse" />
-                <span className="text-lime-400 font-semibold tracking-[0.15em] text-xs sm:text-sm uppercase">
+                <div className={'w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full mr-2 sm:mr-3 lg:mr-3 animate-pulse bg-green-500'} />
+                <span className={'font-semibold tracking-[0.15em] text-xs sm:text-sm uppercase text-green-600'}>
                   Expert Design Studio
                 </span>
               </div>
@@ -270,55 +311,67 @@ const Hero = ({ isLoaded = true }) => {
 
             <div className={`${isLoaded ? 'opacity-0 translate-y-8 animate-[title-cascade_1s_ease-out_0.4s_both]' : 'opacity-0'}`}>
               <h1 className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-5xl font-black leading-[0.9] mb-4 sm:mb-6 tracking-tight">
-                <span className="block text-gray-800 dark:text-gray-100 font-light mb-1 sm:mb-2">We Design</span>
+                <span className={`block font-light mb-1 sm:mb-2 ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>We Design</span>
                 <span 
-                  className="block bg-gradient-to-r from-lime-400 via-emerald-500 to-lime-400 bg-clip-text text-transparent font-black animate-[gradient-shift_3s_ease-in-out_infinite]"
+                  className='block bg-clip-text text-transparent font-black animate-[gradient-shift_3s_ease-in-out_infinite] bg-gradient-to-r from-green-500 via-emerald-500 to-green-600'
                   style={{ backgroundSize: '200% 200%' }}
                 >
                   DIGITAL
                 </span>
-                <span className="block text-gray-800 dark:text-gray-100 font-light mt-1 sm:mt-2">Experiences.</span>
+                <span className={`block font-light mt-1 sm:mt-2 ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>Experiences.</span>
               </h1>
             </div>
 
             <div className={`${isLoaded ? 'opacity-0 translate-y-5 animate-[subtitle-reveal_0.8s_ease-out_0.8s_both]' : 'opacity-0'}`}>
               <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 sm:space-y-5">
-                <p className="text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl text-gray-600 dark:text-gray-300 font-light leading-relaxed">
-                  From <span className="text-lime-400 font-semibold">stunning websites</span> to 
-                  {' '}<span className="text-emerald-400 font-semibold">powerful brand identities</span>, 
-                  we transform your vision into reality.
+                <p className={`text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl font-light leading-relaxed ${
+                  isDark ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  From <span className='font-semibold text-green-600'>stunning websites</span> to 
+                  {' '}<span className='font-semibold text-emerald-600'>powerful brand identities</span>, 
+                  <br/>we transform your vision into reality.
                 </p>
-                <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 text-sm sm:text-sm lg:text-base text-gray-500 dark:text-gray-400">
+                <div className={`flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 text-sm sm:text-sm lg:text-base ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
                   <span className="inline-flex items-center">
-                    <span className="text-base sm:text-lg mr-2 sm:mr-3">🎨</span> 
+                    <Paintbrush className={`w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 ${isDark ? 'text-pink-400' : 'text-pink-500'}`} />
                     <span className="font-medium">Creative Excellence</span>
                   </span>
                   <span className="inline-flex items-center">
-                    <span className="text-base sm:text-lg mr-2 sm:mr-3">⚡</span> 
+                    <Zap className={`w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 ${isDark ? 'text-yellow-400' : 'text-yellow-500'}`} />
                     <span className="font-medium">Lightning Fast</span>
                   </span>
                   <span className="inline-flex items-center">
-                    <span className="text-base sm:text-lg mr-2 sm:mr-3">🚀</span> 
+                    <Target className={`w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
                     <span className="font-medium">Results Driven</span>
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className={`grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 lg:gap-3 justify-center lg:justify-start ${isLoaded ? 'opacity-0 translate-y-5 animate-[cta-reveal_0.8s_ease-out_1.2s_both]' : 'opacity-0'}`}>
+            <div
+              className={`grid grid-cols-[auto_auto] gap-3 justify-center lg:justify-start ${
+                isLoaded
+                  ? 'opacity-0 translate-y-5 animate-[cta-reveal_0.8s_ease-out_1.2s_both]'
+                  : 'opacity-0'
+              }`}
+            >
               {[
-                { name: 'UI/UX Design', short: 'UI/UX', icon: '🎨' },
-                { name: 'Web Development', short: 'Web Dev', icon: '💻' },
-                { name: 'Brand Identity', short: 'Branding', icon: '✨' },
-                { name: 'Mobile Apps', short: 'Mobile', icon: '📱' }
+                { name: 'UI/UX Design', short: 'UI/UX', Icon: Paintbrush },
+                { name: 'Web Development', short: 'Web Dev', Icon: Globe },
+                { name: 'Brand Identity', short: 'Branding', Icon: Sparkles },
+                { name: 'Mobile Apps', short: 'Mobile', Icon: Smartphone }
               ].map((service, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center justify-center px-3 py-2 sm:px-4 sm:py-2 lg:px-4 lg:py-3 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm border border-gray-300/60 dark:border-gray-700/60 rounded-xl lg:rounded-xl text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 hover:border-lime-400/60 hover:text-lime-400 hover:bg-gray-100/60 dark:hover:bg-gray-700/60 transition-all duration-300 group cursor-pointer text-center"
+                  className={`inline-flex items-center justify-center px-3 py-2 sm:px-4 sm:py-2 lg:px-4 lg:py-3 backdrop-blur-sm border rounded-xl lg:rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 group cursor-pointer text-center ${
+                    isDark 
+                      ? 'bg-gray-800/60 border-gray-700/60 text-gray-200 hover:bg-gray-700/60 hover:border-lime-400/60 hover:text-lime-400'
+                      : 'bg-white/60 border-gray-300/60 text-gray-700 hover:bg-gray-100/60 hover:border-green-500/60 hover:text-green-600'
+                  }`}
                 >
-                  <span className="mr-1 sm:mr-2 text-sm sm:text-base lg:text-base group-hover:scale-110 transition-transform duration-300">
-                    {service.icon}
-                  </span>
+                  <service.Icon className="w-3 h-3 sm:w-4 sm:h-4 lg:w-4 lg:h-4 mr-1 sm:mr-2 group-hover:scale-110 transition-transform duration-300" />
                   <span className="hidden sm:inline lg:hidden">{service.short}</span>
                   <span className="sm:hidden lg:inline">{service.name}</span>
                 </span>
@@ -328,7 +381,7 @@ const Hero = ({ isLoaded = true }) => {
             <div className={`flex justify-center lg:justify-start ${isLoaded ? 'opacity-0 translate-y-5 animate-[cta-reveal_0.8s_ease-out_1.4s_both]' : 'opacity-0'}`}>
               <button
                 onClick={() => scrollToSection('contact')}
-                className="relative overflow-hidden bg-gradient-to-r from-lime-400 via-emerald-500 to-lime-400 text-gray-900 rounded-full font-bold text-sm sm:text-base md:text-lg lg:text-lg xl:text-lg px-6 py-3 sm:px-8 sm:py-4 lg:px-8 lg:py-4 transition-all duration-500 transform hover:scale-105 hover:shadow-[0_25px_50px_-12px_rgba(163,230,53,0.5)] group border-none cursor-pointer shadow-[0_0_0_rgba(163,230,53,0.5)]"
+                className={`relative overflow-hidden text-gray-800 rounded-full font-bold text-sm sm:text-base md:text-lg lg:text-lg xl:text-lg px-6 py-3 sm:px-8 sm:py-4 lg:px-8 lg:py-4 transition-all duration-500 transform hover:scale-105 group border-none cursor-pointer bg-green-500 hover:shadow-[0_25px_50px_-12px_rgba(34,197,94,0.5)] shadow-[0_0_0_rgba(34,197,94,0.5)]`}
               >
                 <span className="relative z-10 flex items-center justify-center">
                   Start Your Project
@@ -346,7 +399,7 @@ const Hero = ({ isLoaded = true }) => {
               
               <div 
                 ref={workspaceRef}
-                className="relative cursor-grab select-none w-80 h-56 sm:w-96 sm:h-72 md:w-[420px] md:h-[300px] lg:w-[480px] lg:h-[360px] xl:w-[520px] xl:h-[400px] transition-transform duration-500 ease-out active:cursor-grabbing"
+                className="relative cursor-grab select-none w-[320px] h-[240px] sm:w-[576px] sm:h-[432px] md:w-[624px] md:h-[480px] lg:w-[720px] lg:h-[540px] xl:w-[768px] xl:h-[576px] transition-transform duration-500 ease-out active:cursor-grabbing"
                 onMouseDown={!isMobile ? handleMouseDown : undefined}
                 onTouchStart={isMobile ? handleTouchStart : undefined}
                 onMouseEnter={() => setIsHovered(true)}
@@ -361,18 +414,28 @@ const Hero = ({ isLoaded = true }) => {
                 <div className="absolute inset-0 transform-gpu backface-hidden" style={{ transformStyle: 'preserve-3d' }}>
                   
                   <div 
-                    className="absolute bottom-0 left-1/2 w-20 h-12 sm:w-24 sm:h-14 md:w-28 md:h-16 lg:w-32 lg:h-18 xl:w-36 xl:h-20 rounded-lg border border-gray-600 bg-gradient-to-t from-gray-800 to-gray-600 dark:from-gray-800 dark:to-gray-600"
+                    className={`absolute bottom-0 left-1/2 w-32 h-20 sm:w-32 sm:h-18 md:w-36 md:h-20 lg:w-40 lg:h-22 xl:w-44 xl:h-24 rounded-lg border bg-gradient-to-t ${
+                      isDark 
+                        ? 'border-gray-600 from-gray-800 to-gray-600' 
+                        : 'border-gray-400 from-gray-600 to-gray-400'
+                    }`}
                     style={{ transform: 'translateZ(-20px) translateX(-50%)' }}
                   />
                   
                   <div 
-                    className="absolute inset-0 rounded-lg sm:rounded-xl md:rounded-2xl border-4 sm:border-6 lg:border-8 border-gray-300 dark:border-gray-600 bg-gradient-to-br from-slate-100 to-slate-300 dark:from-gray-800 dark:to-gray-900 transition-all duration-300 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]"
+                    className={`absolute inset-0 rounded-lg sm:rounded-xl md:rounded-2xl border-4 sm:border-6 lg:border-8 bg-gradient-to-br transition-all duration-300 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] ${
+                      isDark 
+                        ? 'border-gray-600 from-gray-800 to-gray-900' 
+                        : 'border-gray-300 from-slate-100 to-slate-300'
+                    }`}
                     style={{ 
                       transform: 'translateZ(0px)'
                     }}
                   >
                     
-                    <div className="w-full h-full rounded-md sm:rounded-lg md:rounded-xl overflow-hidden relative bg-gradient-to-br from-slate-100 to-slate-300 dark:from-gray-800 dark:to-gray-900">
+                    <div className={`w-full h-full rounded-md sm:rounded-lg md:rounded-xl overflow-hidden relative bg-gradient-to-br ${
+                      isDark ? 'from-gray-800 to-gray-900' : 'from-slate-100 to-slate-300'
+                    }`}>
                       
                       <div 
                         className="absolute inset-0 transition-all duration-1000 ease-in-out rounded-md sm:rounded-lg md:rounded-xl"
@@ -381,54 +444,68 @@ const Hero = ({ isLoaded = true }) => {
                         }}
                       >
                         
-                        <div className="flex items-center justify-between p-3 sm:p-4 lg:p-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-300/50 dark:border-gray-700/50">
-                          <div className="flex items-center space-x-1 sm:space-x-2">
-                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 bg-red-500 rounded-full" />
-                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 bg-yellow-500 rounded-full" />
-                            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 bg-green-500 rounded-full" />
+                        <div className={`flex items-center justify-between p-3 sm:p-5 lg:p-6 backdrop-blur-sm border-b ${
+                          isDark 
+                            ? 'bg-gray-800/80 border-gray-700/50' 
+                            : 'bg-white/80 border-gray-300/50'
+                        }`}>
+                          <div className="flex items-center space-x-1.5 sm:space-x-2.5">
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 bg-red-500 rounded-full" />
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 bg-yellow-500 rounded-full" />
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 bg-green-500 rounded-full" />
                           </div>
-                          <div className="flex items-center space-x-1 sm:space-x-2">
-                            <span className="text-lg sm:text-xl lg:text-2xl">{currentProject.icon}</span>
-                            <span className="text-xs lg:text-sm text-gray-600 dark:text-gray-300 font-medium hidden sm:inline">{currentProject.type}</span>
+                          <div className="flex items-center space-x-1.5">
+                            <div className="text-lime-400">{currentProject.icon}</div>
+                            <span className={`text-xs sm:text-sm lg:text-base font-medium ${
+                              isDark ? 'text-gray-300' : 'text-gray-600'
+                            }`}>{currentProject.type}</span>
                           </div>
                         </div>
                         
-                        <div className="p-3 sm:p-4 lg:p-6">
-                          <div className="mb-4 sm:mb-5 lg:mb-6">
-                            <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 dark:text-white mb-2 sm:mb-3">{currentProject.title}</h3>
-                            <div className="flex items-center justify-center lg:justify-start space-x-1 sm:space-x-2">
+                        <div className="p-3 sm:p-6 lg:p-8">
+                          <div className="mb-4 sm:mb-6 lg:mb-8">
+                            <h3 className={`text-sm sm:text-lg lg:text-xl font-bold mb-2 sm:mb-4 ${
+                              isDark ? 'text-white' : 'text-gray-800'
+                            }`}>{currentProject.title}</h3>
+                            <div className="flex items-center justify-center lg:justify-start space-x-1.5 sm:space-x-2.5">
                               {currentProject.colors.map((color, index) => (
                                 <div
                                   key={index}
-                                  className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 rounded-full border border-gray-400/30 dark:border-white/30"
+                                  className={`w-3 h-3 sm:w-5 sm:h-5 lg:w-6 lg:h-6 rounded-full border ${
+                                    isDark ? 'border-white/30' : 'border-gray-400/30'
+                                  }`}
                                   style={{ backgroundColor: color }}
                                 />
                               ))}
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+                          <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-5">
                             {currentProject.elements.map((element, index) => (
                               <div
                                 key={index}
-                                className="h-8 sm:h-12 lg:h-16 rounded-sm sm:rounded-md lg:rounded-lg border border-dashed border-gray-400 dark:border-gray-600 flex items-center justify-center relative overflow-hidden group"
+                                className={`h-10 sm:h-16 lg:h-20 rounded-md sm:rounded-lg lg:rounded-xl border border-dashed flex items-center justify-center relative overflow-hidden group ${
+                                  isDark ? 'border-gray-600' : 'border-gray-400'
+                                }`}
                                 style={{
                                   background: `linear-gradient(45deg, ${currentProject.colors[index % 3]}15, ${currentProject.colors[(index + 1) % 3]}15)`,
                                   animationDelay: `${index * 0.2}s`
                                 }}
                               >
-                                <span className="text-xs sm:text-xs lg:text-sm text-gray-600 dark:text-gray-400 uppercase tracking-wide font-medium">{element}</span>
+                                <span className={`text-xs sm:text-sm lg:text-base uppercase tracking-wide font-medium ${
+                                  isDark ? 'text-gray-400' : 'text-gray-600'
+                                }`}>{element}</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                               </div>
                             ))}
                           </div>
                           
-                          <div className="mt-4 sm:mt-5 lg:mt-6 flex justify-center space-x-1 sm:space-x-2">
+                          <div className="mt-4 sm:mt-6 lg:mt-8 flex justify-center space-x-1.5 sm:space-x-2.5">
                             {projects.map((_, index) => (
                               <div
                                 key={index}
-                                className={`h-1 sm:h-1.5 lg:h-2 rounded-full transition-all duration-300 ${
-                                  index === activeScreen ? 'bg-lime-400 w-4 sm:w-5 lg:w-6' : 'bg-gray-600 w-1 sm:w-1.5 lg:w-2'
+                                className={`h-1 sm:h-2 lg:h-2.5 rounded-full transition-all duration-300 ${
+                                  index === activeScreen ? `w-4 sm:w-6 lg:w-8 ${isDark ? 'bg-lime-400' : 'bg-green-500'}` : `w-1 sm:w-2 lg:w-2.5 ${isDark ? 'bg-gray-600' : 'bg-gray-400'}`
                                 }`}
                               />
                             ))}
@@ -438,38 +515,23 @@ const Hero = ({ isLoaded = true }) => {
                     </div>
                   </div>
                   
-                  <div
-                    className="absolute w-8 h-8 sm:w-10 sm:h-10 lg:w-16 lg:h-16 backdrop-blur-2xl rounded-lg sm:rounded-xl border border-gray-300/60 dark:border-gray-600/50 flex items-center justify-center text-sm sm:text-lg lg:text-2xl bg-gray-100/80 dark:bg-gray-800/30 transition-all duration-300 hover:bg-gray-200/90 dark:hover:bg-gray-700/50"
-                    style={{
-                      right: isMobile ? '-25px' : '-60px',
-                      top: isMobile ? '20px' : '40px',
-                      transform: `translateZ(20px) rotateY(${-time * 15}deg)`,
-                    }}
-                  >
-                    📐
-                  </div>
-                  
-                  <div
-                    className="absolute w-8 h-8 sm:w-10 sm:h-10 lg:w-16 lg:h-16 backdrop-blur-2xl rounded-lg sm:rounded-xl border border-gray-300/60 dark:border-gray-600/50 flex items-center justify-center text-sm sm:text-lg lg:text-2xl bg-gray-100/80 dark:bg-gray-800/30 transition-all duration-300 hover:bg-gray-200/90 dark:hover:bg-gray-700/50"
-                    style={{
-                      left: isMobile ? '-25px' : '-50px',
-                      bottom: isMobile ? '20px' : '30px',
-                      transform: `translateZ(25px) rotateY(${time * 10}deg)`,
-                    }}
-                  >
-                    💡
-                  </div>
-                  
-                  <div
-                    className="absolute w-8 h-8 sm:w-10 sm:h-10 lg:w-16 lg:h-16 backdrop-blur-2xl rounded-lg sm:rounded-xl border border-gray-300/60 dark:border-gray-600/50 flex items-center justify-center text-sm sm:text-lg lg:text-2xl bg-gray-100/80 dark:bg-gray-800/30 transition-all duration-300 hover:bg-gray-200/90 dark:hover:bg-gray-700/50"
-                    style={{
-                      right: isMobile ? '-25px' : '-50px',
-                      bottom: isMobile ? '50px' : '60px',
-                      transform: `translateZ(15px) rotateY(${-time * 25}deg)`,
-                    }}
-                  >
-                    🚀
-                  </div>
+                  {/* Floating elements with proper icons */}
+                  {floatingElements.map((element, index) => (
+                    <div
+                      key={index}
+                      className={`absolute w-8 h-8 sm:w-12 sm:h-12 lg:w-18 lg:h-18 xl:w-20 xl:h-20 backdrop-blur-2xl rounded-lg sm:rounded-xl border flex items-center justify-center text-lg sm:text-xl lg:text-2xl xl:text-3xl transition-all duration-300 ${
+                        isDark 
+                          ? 'border-gray-600/50 bg-gray-800/30 hover:bg-gray-700/50' 
+                          : 'border-gray-300/60 bg-gray-100/80 hover:bg-gray-200/90'
+                      } ${element.color}`}
+                      style={{
+                        ...element.position,
+                        transform: element.transform,
+                      }}
+                    >
+                      <element.Icon className="w-4 h-4 sm:w-6 sm:h-6 lg:w-10 lg:h-10 xl:w-12 xl:h-12" />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

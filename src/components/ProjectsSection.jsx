@@ -4,8 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image"; 
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTheme } from '@/contexts/ThemeContext';
 
 const ProjectsSection = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const intervalRef = useRef(null);
@@ -15,67 +19,68 @@ const ProjectsSection = () => {
     { 
       name: 'Pure Buys', 
       type: 'E-commerce Design',
-      image: 'https://miravisions.com/wp-content/uploads/2024/10/purebuys_.webp',
+      image: '/projects/purebuys.webp',
       gradient: 'from-blue-500 to-purple-600',
       description: 'Modern e-commerce platform with seamless user experience'
     },
     { 
       name: 'Sauce Harra', 
       type: 'Brand Identity',
-      image: 'https://miravisions.com/wp-content/uploads/2024/10/banner_sauce_harra.webp',
+      image: '/projects/sauce_harra.webp',
       gradient: 'from-red-500 to-orange-600',
       description: 'Spicy brand identity that captures authentic flavors'
     },
     { 
       name: 'Rapide Scooter', 
       type: 'Complete Branding',
-      image: 'https://miravisions.com/wp-content/uploads/2024/03/rapidescooterrecent.png',
+      image: '/projects/rapied_scooter.webp',
       gradient: 'from-emerald-500 to-teal-600',
       description: 'Urban mobility solution with dynamic visual identity'
     },
     { 
       name: 'Frizzies', 
       type: 'Visual Identity',
-      image: 'https://miravisions.com/wp-content/uploads/2024/10/Frizzies-1.webp',
+      image: '/projects/frizzies.webp',
       gradient: 'from-gray-700 to-gray-900',
       description: 'Dark kitchen concept with bold visual storytelling'
     },
     { 
       name: 'Dark Kitchen', 
       type: 'Restaurant Branding',
-      image: 'https://miravisions.com/wp-content/uploads/2024/03/AYLANRESTO.png',
+      image: '/projects/dark_kitchen.webp',
       gradient: 'from-purple-600 to-pink-600',
       description: 'Innovative ghost kitchen brand with modern delivery focus'
     },
     { 
       name: 'Muslim Blocks', 
       type: 'Platform Design',
-      image: 'https://miravisions.com/wp-content/uploads/2024/03/muslimblocksbanner.jpg',
+      image: '/projects/muslim_blocks.webp',
       gradient: 'from-green-500 to-emerald-600',
       description: 'Educational platform connecting communities through design'
     },
     { 
       name: 'Tourism Dubai', 
       type: 'Website & Graphics',
-      image: 'https://miravisions.com/wp-content/uploads/2024/03/ttdubai.png',
+      image: '/projects/tourism_dubai.webp',
       gradient: 'from-amber-500 to-orange-600',
       description: 'Luxury tourism experience with golden visual aesthetics'
     },
     { 
       name: 'Beach Day Every Day', 
       type: 'Corporate Identity',
-      image: 'https://miravisions.com/wp-content/uploads/2024/10/beachdayeveryday_miravisions.webp',
+      image: '/projects/beach_day_every_day.webp',
       gradient: 'from-indigo-500 to-purple-600',
       description: 'Professional corporate branding with modern approach'
     },
     { 
       name: 'Fritzguard', 
       type: 'Brand & Website',
-      image: 'https://miravisions.com/wp-content/uploads/2024/10/fritzguard.webp',
+      image: '/projects/fritzguard.webp',
       gradient: 'from-slate-600 to-gray-800',
       description: 'Security-focused brand with trustworthy design language'
     }
   ];
+
 
   useEffect(() => {
     const startAutoScroll = () => {
@@ -125,8 +130,26 @@ const ProjectsSection = () => {
   };
 
   return (
-    <section id="portfolio" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+    <section id="portfolio" className={`relative py-16 sm:py-20 lg:py-24 bg-gradient-to-bl overflow-hidden  ${
+        isDark           ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+          : 'bg-gradient-to-tr from-white to-slate-200'
+
+      }`}>
+                
+      {/* grid */}
+      <div 
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.04]' : 'opacity-[0.08]'}`}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(34, 197, 94, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34, 197, 94, 0.5) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -134,14 +157,28 @@ const ProjectsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-lime-500/10 border border-lime-500/20 rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6">
-            <div className="w-2 h-2 bg-lime-500 rounded-full animate-pulse"></div>
-            <span className="text-lime-600 dark:text-lime-400 text-xs sm:text-sm font-medium">PREVIOUS PROJECTS</span>
+          <div className={`inline-flex items-center gap-2 rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6 ${
+            isDark 
+              ? 'bg-green-600/10 border border-green-600/20' 
+              : 'bg-green-500/10 border border-green-500/20'
+          }`}>
+            <div className={`w-2 h-2 rounded-full animate-pulse ${
+              isDark ? 'bg-green-600' : 'bg-green-500'
+            }`}></div>
+            <span className={`text-xs sm:text-sm font-medium ${
+              isDark ? 'text-green-600' : 'text-green-600'
+            }`}>PREVIOUS PROJECTS</span>
           </div>
-          <h2 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent mb-6">
+          <h2 className={`text-4xl lg:text-6xl font-bold bg-gradient-to-r bg-clip-text text-transparent mb-6 ${
+            isDark 
+              ? 'from-white via-gray-200 to-white' 
+              : 'from-gray-900 via-gray-700 to-gray-900'
+          }`}>
             Our Creative Portfolio
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
+          <p className={`text-xl max-w-3xl mx-auto mb-8 ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Discover the brands we've transformed through innovative design and strategic creativity
           </p>
         </motion.div>
@@ -153,7 +190,7 @@ const ProjectsSection = () => {
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
-            className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 cursor-grab active:cursor-grabbing select-none overflow-hidden"
+            className="flex items-center justify-center gap-4 sm:gap-8 lg:gap-16 cursor-grab active:cursor-grabbing select-none overflow-hidden"
             style={{ width: '100%' }}
           >
             <motion.div
@@ -172,7 +209,7 @@ const ProjectsSection = () => {
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
               onClick={goToPrevious}
-              className="hidden sm:block relative w-40 h-56 lg:w-48 lg:h-64 xl:w-52 xl:h-68 rounded-2xl overflow-hidden cursor-pointer group shrink-0"
+              className="hidden sm:block relative w-56 lg:w-60 xl:w-64 aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group shrink-0"
             >
               <Image
                 src={brands[prev].image}
@@ -221,7 +258,7 @@ const ProjectsSection = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <motion.div
-                  className="inline-block px-2 py-1 bg-lime-400 text-gray-900 rounded-full text-xs font-bold mb-2"
+                  className="inline-block px-2 py-1 bg-green-400 text-gray-900 rounded-full text-xs font-bold mb-2"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.4 }}
@@ -252,9 +289,9 @@ const ProjectsSection = () => {
                 className="absolute inset-0 rounded-3xl"
                 animate={{
                   boxShadow: [
-                    "0 0 0 2px rgba(132, 204, 22, 0.3)",
-                    "0 0 0 4px rgba(132, 204, 22, 0.5)",
-                    "0 0 0 2px rgba(132, 204, 22, 0.3)"
+                    "0 0 0 2px rgba(34, 197, 94, 0.3)",
+                    "0 0 0 4px rgba(34, 197, 94, 0.5)",
+                    "0 0 0 2px rgba(34, 197, 94, 0.3)"
                   ]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -277,14 +314,14 @@ const ProjectsSection = () => {
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
               onClick={goToNext}
-              className="hidden sm:block relative w-40 h-56 lg:w-48 lg:h-64 xl:w-52 xl:h-68 rounded-2xl overflow-hidden cursor-pointer group shrink-0"
+              className="hidden sm:block relative w-56 lg:w-60 xl:w-64 aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer group shrink-0"
             >
               <Image
                 src={brands[next].image}
                 alt={brands[next].name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                sizes="(max-width: 640px) 0px, (max-width: 1024px) 112px, (max-width: 1280px) 128px, 144px"
+                sizes="(max-width: 640px) 0px, (max-width: 1024px) 144px, (max-width: 1280px) 160px, 176px"
               />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
               
@@ -296,16 +333,28 @@ const ProjectsSection = () => {
 
           <button
             onClick={goToPrevious}
-            className="cursor-pointer absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-30 cursor-pointer"
+            className={`cursor-pointer absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-12 h-12 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-30 ${
+              isDark 
+                ? 'bg-gray-800/90 hover:bg-gray-700/90' 
+                : 'bg-white/90 hover:bg-gray-50/90'
+            }`}
           >
-            <ChevronLeft className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+            <ChevronLeft className={`w-6 h-6 ${
+              isDark ? 'text-gray-300' : 'text-gray-700'
+            }`} />
           </button>
           
           <button
             onClick={goToNext}
-            className="cursor-pointer absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-30"
+            className={`cursor-pointer absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-12 h-12 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-30 ${
+              isDark 
+                ? 'bg-gray-800/90 hover:bg-gray-700/90' 
+                : 'bg-white/90 hover:bg-gray-50/90'
+            }`}
           >
-            <ChevronRight className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+            <ChevronRight className={`w-6 h-6 ${
+              isDark ? 'text-gray-300' : 'text-gray-700'
+            }`} />
           </button>
         </div>
 
@@ -318,10 +367,12 @@ const ProjectsSection = () => {
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
             >
-              <div className="cursor-pointer w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600" />
+              <div className={`cursor-pointer w-3 h-3 rounded-full ${
+                isDark ? 'bg-gray-600' : 'bg-gray-300'
+              }`} />
               
               <motion.div
-                className="absolute inset-0 w-3 h-3 rounded-full bg-gradient-to-r from-lime-400 to-emerald-500"
+                className="absolute inset-0 w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500"
                 initial={false}
                 animate={{
                   scale: index === currentIndex ? 1 : 0,
@@ -342,7 +393,7 @@ const ProjectsSection = () => {
                       cx="12"
                       cy="12"
                       r="10"
-                      stroke="rgba(132, 204, 22, 0.8)"
+                      stroke="rgba(34, 197, 94, 0.8)"
                       strokeWidth="2"
                       fill="none"
                       strokeLinecap="round"
@@ -363,13 +414,17 @@ const ProjectsSection = () => {
           transition={{ delay: 1, duration: 0.5 }}
           className="sm:hidden text-center mt-6"
         >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className={`text-sm ${
+            isDark ? 'text-gray-400' : 'text-gray-500'
+          }`}>
             Swipe left or right to navigate
           </p>
         </motion.div>
 
         <div className="mt-8 max-w-md mx-auto text-center">
-          <span className="text-lg font-medium text-gray-600 dark:text-gray-400">
+          <span className={`text-lg font-medium ${
+            isDark ? 'text-gray-400' : 'text-gray-600'
+          }`}>
             {brands[current].type}
           </span>
         </div>
@@ -379,7 +434,9 @@ const ProjectsSection = () => {
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-lime-400/20 rounded-full"
+            className={`absolute w-2 h-2 rounded-full ${
+              isDark ? 'bg-green-600/20' : 'bg-green-400/20'
+            }`}
             animate={{
               x: [0, 100, 0],
               y: [0, -100, 0],

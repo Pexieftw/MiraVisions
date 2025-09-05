@@ -2,8 +2,12 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTheme } from '@/contexts/ThemeContext'
 
 const ContactSection = () => {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -99,40 +103,19 @@ const ContactSection = () => {
     }
 
     try {
-      const payload = {
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        company: formData.company.trim(),
-        service: formData.service,
-        message: formData.message.trim()
-      }
-
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      setSubmitStatus('success')
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        service: '',
+        message: ''
       })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        setSubmitStatus('success')
-        setFormData({
-          name: '',
-          email: '',
-          company: '',
-          service: '',
-          message: ''
-        })
-        setValidationErrors({})
-      } else {
-        console.error('API Error:', data)
-        setSubmitStatus('error')
-      }
+      setValidationErrors({})
     } catch (error) {
-      console.error('Network Error:', error)
+      console.error('Error:', error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -145,79 +128,68 @@ const ContactSection = () => {
   }
 
   return (
-    <section id="contact" className="relative py-20 lg:py-32 bg-gradient-to-bl from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -100, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-lime-400/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -150, 0],
-            y: [0, 150, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"
-        />
-      </div>
+    <section id="contact" className={`relative py-10 lg:py-14 overflow-hidden ${
+      isDark 
+        ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+        : 'bg-gradient-to-tr from-white to-slate-200'
+    }`}>
+
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <motion.div
-            initial={{ scale: 0.9 }}
-            whileInView={{ scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative inline-block"
-          >
-            <h2 className="text-5xl lg:text-7xl font-black bg-gradient-to-r from-lime-400 via-emerald-500 to-teal-600 bg-clip-text text-transparent mb-8">
-              Get In Touch
-            </h2>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed"
-          >
-            Ready to bring your project to life? Let's discuss how we can help you achieve your goals.
-          </motion.p>
+          <div className={`inline-flex items-center gap-2 rounded-full px-4 sm:px-6 py-2 mb-4 sm:mb-6 ${
+            isDark 
+              ? 'bg-green-600/10 border border-green-600/20' 
+              : 'bg-green-600/10 border border-green-600/20'
+          }`}>
+            <div className={`w-2 h-2 rounded-full animate-pulse ${
+              isDark ? 'bg-green-600' : 'bg-green-600'
+            }`}></div>
+            <span className={`text-xs sm:text-sm font-medium ${
+              isDark ? 'text-green-400' : 'text-green-600'
+            }`}>GET IN TOUCH</span>
+          </div>
+          <h2 className={`text-4xl lg:text-5xl font-bold mb-6 ${
+            isDark ? 'text-white' : 'text-gray-900'
+          }`}>
+            Ready to <span className="text-green-600">Start</span> Your Project?
+          </h2>
+          <p className={`text-xl max-w-2xl mx-auto ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>
+            Let's discuss how we can help you achieve your goals <br/>and bring your vision to life
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 items-stretch">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="xl:col-span-2 flex"
+            className="xl:col-span-2"
           >
-            <div className="relative flex-1">
-              <div className="absolute -inset-1 bg-gradient-to-r from-lime-400 to-emerald-500 rounded-3xl blur-lg opacity-25"></div>
-              <div className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl p-8 lg:p-12 rounded-3xl border border-white/20 dark:border-gray-700/20 shadow-2xl h-full flex flex-col">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div className="relative h-full">
+              <div className={`relative p-8 lg:p-10 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border h-full overflow-hidden group ${
+                isDark 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-100'
+              }`}>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   <motion.div
                     variants={inputVariants}
                     animate={focusedField === 'name' ? 'focused' : 'unfocused'}
                   >
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider">
+                    <label className={`block text-sm font-bold mb-2 uppercase tracking-wider ${
+                      isDark ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -228,15 +200,21 @@ const ContactSection = () => {
                       onChange={handleInputChange}
                       onFocus={() => setFocusedField('name')}
                       onBlur={() => setFocusedField(null)}
-                      className={`w-full p-5 rounded-2xl border-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-900 dark:text-white focus:ring-4 focus:ring-lime-400/20 transition-all duration-300 text-lg min-h-[60px] ${
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-base h-14 ${
+                        isDark 
+                          ? 'bg-gray-700/70 text-white' 
+                          : 'bg-gray-50/70 text-gray-900'
+                      } ${
                         validationErrors.name 
                           ? 'border-red-400 focus:border-red-400' 
-                          : 'border-gray-200 dark:border-gray-600 focus:border-lime-400'
+                          : isDark
+                            ? 'border-gray-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+                            : 'border-gray-200 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
                       }`}
                       placeholder="Enter your full name"
                     />
                     {validationErrors.name && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">{validationErrors.name}</p>
+                      <p className={`mt-1 text-sm ${isDark ? 'text-red-400' : 'text-red-600'}`}>{validationErrors.name}</p>
                     )}
                   </motion.div>
 
@@ -244,7 +222,9 @@ const ContactSection = () => {
                     variants={inputVariants}
                     animate={focusedField === 'email' ? 'focused' : 'unfocused'}
                   >
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider">
+                    <label className={`block text-sm font-bold mb-2 uppercase tracking-wider ${
+                      isDark ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -255,25 +235,33 @@ const ContactSection = () => {
                       onChange={handleInputChange}
                       onFocus={() => setFocusedField('email')}
                       onBlur={() => setFocusedField(null)}
-                      className={`w-full p-5 rounded-2xl border-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-900 dark:text-white focus:ring-4 focus:ring-lime-400/20 transition-all duration-300 text-lg min-h-[60px] ${
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-base h-14 ${
+                        isDark 
+                          ? 'bg-gray-700/70 text-white' 
+                          : 'bg-gray-50/70 text-gray-900'
+                      } ${
                         validationErrors.email 
                           ? 'border-red-400 focus:border-red-400' 
-                          : 'border-gray-200 dark:border-gray-600 focus:border-lime-400'
+                          : isDark
+                            ? 'border-gray-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+                            : 'border-gray-200 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
                       }`}
                       placeholder="your@email.com"
                     />
                     {validationErrors.email && (
-                      <p className="mt-2 text-sm text-red-600 dark:text-red-400">{validationErrors.email}</p>
+                      <p className={`mt-1 text-sm ${isDark ? 'text-red-400' : 'text-red-600'}`}>{validationErrors.email}</p>
                     )}
                   </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   <motion.div
                     variants={inputVariants}
                     animate={focusedField === 'company' ? 'focused' : 'unfocused'}
                   >
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider">
+                    <label className={`block text-sm font-bold mb-2 uppercase tracking-wider ${
+                      isDark ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Company / Organization
                     </label>
                     <input
@@ -283,7 +271,11 @@ const ContactSection = () => {
                       onChange={handleInputChange}
                       onFocus={() => setFocusedField('company')}
                       onBlur={() => setFocusedField(null)}
-                      className="w-full p-5 rounded-2xl border-2 border-gray-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-900 dark:text-white focus:border-lime-400 focus:ring-4 focus:ring-lime-400/20 transition-all duration-300 text-lg min-h-[60px]"
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-base h-14 ${
+                        isDark 
+                          ? 'bg-gray-700/70 text-white border-gray-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20' 
+                          : 'bg-gray-50/70 text-gray-900 border-gray-200 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+                      }`}
                       placeholder="Company name (optional)"
                     />
                   </motion.div>
@@ -292,7 +284,9 @@ const ContactSection = () => {
                     variants={inputVariants}
                     animate={focusedField === 'service' ? 'focused' : 'unfocused'}
                   >
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider">
+                    <label className={`block text-sm font-bold mb-2 uppercase tracking-wider ${
+                      isDark ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       Service Interest
                     </label>
                     <select
@@ -301,7 +295,11 @@ const ContactSection = () => {
                       onChange={handleInputChange}
                       onFocus={() => setFocusedField('service')}
                       onBlur={() => setFocusedField(null)}
-                      className="w-full p-5 rounded-2xl border-2 border-gray-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-900 dark:text-white focus:border-lime-400 focus:ring-4 focus:ring-lime-400/20 transition-all duration-300 text-lg min-h-[60px]"
+                      className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-base h-14 ${
+                        isDark 
+                          ? 'bg-gray-700/70 text-white border-gray-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20' 
+                          : 'bg-gray-50/70 text-gray-900 border-gray-200 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+                      }`}
                     >
                       <option value="">Select a service</option>
                       <option value="website">Website Development</option>
@@ -317,31 +315,41 @@ const ContactSection = () => {
                 <motion.div
                   variants={inputVariants}
                   animate={focusedField === 'message' ? 'focused' : 'unfocused'}
-                  className="mb-8 flex-1"
+                  className="mb-6"
                 >
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3 uppercase tracking-wider">
+                  <label className={`block text-sm font-bold mb-2 uppercase tracking-wider ${
+                    isDark ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     Project Details <span className="text-red-500">*</span>
-                    <span className="text-xs font-normal ml-2 text-gray-500">
+                    <span className={`text-xs font-normal ml-2 ${
+                      isDark ? 'text-gray-500' : 'text-gray-500'
+                    }`}>
                       ({formData.message.length}/2000 characters, minimum 10)
                     </span>
                   </label>
                   <textarea
                     name="message"
                     required
-                    rows={6}
+                    rows={4}
                     value={formData.message}
                     onChange={handleInputChange}
                     onFocus={() => setFocusedField('message')}
                     onBlur={() => setFocusedField(null)}
-                    className={`w-full p-5 rounded-2xl border-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm text-gray-900 dark:text-white focus:ring-4 focus:ring-lime-400/20 transition-all duration-300 text-lg resize-none flex-1 min-h-[200px] ${
+                    className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-base resize-none min-h-[120px] ${
+                      isDark 
+                        ? 'bg-gray-700/70 text-white' 
+                        : 'bg-gray-50/70 text-gray-900'
+                    } ${
                       validationErrors.message 
                         ? 'border-red-400 focus:border-red-400' 
-                        : 'border-gray-200 dark:border-gray-600 focus:border-lime-400'
+                        : isDark
+                          ? 'border-gray-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+                          : 'border-gray-200 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
                     }`}
                     placeholder="Tell us about your project, goals, timeline, and any specific requirements..."
                   />
                   {validationErrors.message && (
-                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">{validationErrors.message}</p>
+                    <p className={`mt-1 text-sm ${isDark ? 'text-red-400' : 'text-red-600'}`}>{validationErrors.message}</p>
                   )}
                 </motion.div>
 
@@ -350,7 +358,7 @@ const ContactSection = () => {
                   disabled={isSubmitting || Object.keys(validationErrors).length > 0}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full relative overflow-hidden bg-gradient-to-r from-lime-400 via-emerald-500 to-teal-600 text-gray-900 py-6 px-8 rounded-2xl font-black text-xl transition-all duration-300 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed mt-auto"
+                  className="w-full relative overflow-hidden cursor-pointer bg-green-600 text-white py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-2xl"
                 >
                   <motion.div
                     animate={{
@@ -361,7 +369,7 @@ const ContactSection = () => {
                       repeat: isSubmitting ? Infinity : 0,
                       ease: "linear"
                     }}
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    className=""
                   />
                   <span className="relative z-10">
                     {isSubmitting ? 'Sending Message...' : 'Send Message'}
@@ -374,10 +382,14 @@ const ContactSection = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
-                      className={`mt-6 p-4 rounded-xl text-center font-semibold ${
+                      className={`mt-4 p-3 rounded-lg text-center font-semibold ${
                         submitStatus === 'success' 
-                          ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700' 
-                          : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-700'
+                          ? isDark 
+                            ? 'bg-emerald-900/20 text-emerald-300 border border-emerald-700' 
+                            : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          : isDark 
+                            ? 'bg-red-900/20 text-red-300 border border-red-700'
+                            : 'bg-red-100 text-red-800 border border-red-200'
                       }`}
                     >
                       {submitStatus === 'success' 
@@ -386,6 +398,8 @@ const ContactSection = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
             </div>
           </motion.div>
@@ -395,78 +409,105 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="flex"
+            className="flex flex-col h-full"
           >
-            <div className="space-y-8 flex flex-col h-full flex-1">
-              <div className="relative">
-                <div className="relative bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/40 dark:border-gray-700/40 flex-1">
-                  <div className="flex items-center mb-6">
-                    <motion.div 
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.5 }}
-                      className="w-16 h-16 bg-gradient-to-r from-lime-400 to-emerald-500 rounded-2xl flex items-center justify-center mr-4"
-                    >
-                      <svg className="w-8 h-8 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </motion.div>
-                    <div>
-                      <h3 className="text-xl font-black text-gray-900 dark:text-white">Email Us</h3>
-                      <p className="text-gray-600 dark:text-gray-400">Direct communication</p>
-                    </div>
-                  </div>
-                  <motion.a 
-                    href="mailto:info@miravision.com"
-                    whileHover={{ scale: 1.05 }}
-                    className="text-lg font-bold text-lime-600 hover:text-emerald-600 transition-colors"
-                  >
-                    info@miravision.com
-                  </motion.a>
-                </div>
-              </div>
+            <div className="flex flex-col justify-between h-full space-y-6">
+              <motion.div 
+                whileHover={{ scale: 1.02, y: -8 }}
+                className={`p-6 rounded-3xl border flex-1 flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-700' 
+                    : 'bg-white border-gray-100'
+                }`}
+              >
 
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/40 dark:border-gray-700/40 flex-1 flex flex-col justify-center">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center mr-4">
+                
+                <div className="flex items-center mb-4 relative z-10">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Email Us</h3>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Direct communication</p>
+                  </div>
+                </div>
+                <motion.a 
+                  href="mailto:info@miravision.com"
+                  whileHover={{ scale: 1.05 }}
+                  className={`text-base font-bold transition-colors relative z-10 ${
+                    isDark ? 'text-green-400 hover:text-emerald-400' : 'text-green-600 hover:text-emerald-600'
+                  }`}
+                >
+                  info@miravision.com
+                </motion.a>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </motion.div>
+
+              <motion.div 
+                whileHover={{ scale: 1.02, y: -8 }}
+                className={`p-6 rounded-3xl border flex-1 flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-700' 
+                    : 'bg-white border-gray-100'
+                }`}
+              >
+
+                
+                <div className="flex items-center mb-4 relative z-10">
+                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h5 className="font-black text-gray-900 dark:text-white text-lg">Quick Response</h5>
+                  <div>
+                    <h5 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Quick Response</h5>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Fast turnaround</p>
+                  </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className={`text-sm leading-relaxed relative z-10 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   We typically respond to all inquiries within 24 hours during business days. Urgent projects get priority attention.
                 </p>
-              </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </motion.div>
 
-              <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/40 dark:border-gray-700/40 flex-1">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-teal-400 to-lime-500 rounded-xl flex items-center justify-center mr-4">
+              <motion.div 
+                whileHover={{ scale: 1.02, y: -8 }}
+                className={`p-6 rounded-3xl border flex-1 flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
+                  isDark 
+                    ? 'bg-gray-800 border-gray-700' 
+                    : 'bg-white border-gray-100'
+                }`}
+              >
+
+                
+                <div className="flex items-center mb-4 relative z-10">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h5 className="font-black text-gray-900 dark:text-white text-lg">Our Expertise</h5>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <span className="w-3 h-3 bg-gradient-to-r from-lime-400 to-emerald-500 rounded-full mr-3 flex-shrink-0"></span>
-                    <span className="text-gray-600 dark:text-gray-400 font-medium">Website Development</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full mr-3 flex-shrink-0"></span>
-                    <span className="text-gray-600 dark:text-gray-400 font-medium">Brand Identity Design</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="w-3 h-3 bg-gradient-to-r from-teal-600 to-lime-400 rounded-full mr-3 flex-shrink-0"></span>
-                    <span className="text-gray-600 dark:text-gray-400 font-medium">Creative Media Solutions</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="w-3 h-3 bg-gradient-to-r from-lime-500 to-emerald-400 rounded-full mr-3 flex-shrink-0"></span>
-                    <span className="text-gray-600 dark:text-gray-400 font-medium">Digital Strategy Consulting</span>
+                  <div>
+                    <h5 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Our Expertise</h5>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>What we do best</p>
                   </div>
                 </div>
-              </div>
+                <div className="space-y-2 relative z-10">
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full mr-3 flex-shrink-0"></span>
+                    <span className={`font-medium text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Website Development</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 bg-gradient-to-r from-emerald-600 to-green-600 rounded-full mr-3 flex-shrink-0"></span>
+                    <span className={`font-medium text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Brand Identity Design</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full mr-3 flex-shrink-0"></span>
+                    <span className={`font-medium text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Creative Media Solutions</span>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </div>

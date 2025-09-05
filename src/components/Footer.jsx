@@ -2,10 +2,14 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, ArrowUp, Sparkles } from 'lucide-react';
+import { Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
 import Image from "next/image";
+import { useTheme } from '@/contexts/ThemeContext';
 
 const Footer = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   const [activeSection, setActiveSection] = useState('');
   const [isManualScrolling, setIsManualScrolling] = useState(false);
 
@@ -79,7 +83,12 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className={`bg-gradient-to-br from-gray-900 to-slate-800'
+    } text-white border-t ${
+      isDark 
+        ? 'border-gray-700/50' 
+        : 'border-gray-600/30'
+    }`}>
       <motion.div 
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
         variants={containerVariants}
@@ -100,15 +109,17 @@ const Footer = () => {
               whileTap={{ scale: 0.98 }}
             >
               <Image
-                src="https://miravisions.com/wp-content/uploads/2024/03/miravisionswhte@4x.png"
+                src="/miravisions-logo-white.webp"
                 alt="Mira Visions Logo"
-                width={160}
-                height={48}
-                className="h-10 lg:h-12 w-auto object-contain transition-all duration-300 group-hover:brightness-110"
+                width={195} 
+                height={48}   
+                className="object-contain transition-all duration-300 group-hover:brightness-110"
                 priority
               />
             </motion.div>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className={`mb-6 leading-relaxed ${
+              isDark ? 'text-gray-300' : 'text-gray-400'
+            }`}>
               Executing your visions to reality through expert website creation,
               graphic design, brand identity, and creative media solutions.
             </p>
@@ -116,7 +127,11 @@ const Footer = () => {
             <div className="flex space-x-3 justify-center md:justify-start">
               <motion.a
                 href="tel:+15551234567"
-                className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-lime-400 hover:text-gray-900 transition-all duration-300 cursor-pointer"
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                  isDark 
+                    ? 'bg-gray-800 text-gray-400 hover:bg-green-600 hover:text-white' 
+                    : 'bg-gray-700 text-gray-300 hover:bg-green-600 hover:text-white'
+                }`}
                 whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -124,8 +139,12 @@ const Footer = () => {
               </motion.a>
               
               <motion.a
-                href="mailto:hello@miravisions.com"
-                className="w-10 h-10 rounded-xl bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-lime-400 hover:text-gray-900 transition-all duration-300 cursor-pointer"
+                href="mailto:info@miravisions.com"
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                  isDark 
+                    ? 'bg-gray-800 text-gray-400 hover:bg-green-600 hover:text-white' 
+                    : 'bg-gray-700 text-gray-300 hover:bg-green-600 hover:text-white'
+                }`}
                 whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -136,8 +155,9 @@ const Footer = () => {
 
           <motion.div variants={itemVariants} className="flex justify-center md:justify-start">
             <div>
-              <h4 className="font-bold text-lg mb-6 text-white flex items-center justify-center md:justify-start">
-                <Sparkles className="w-4 h-4 mr-2 text-lime-400" />
+              <h4 className={`font-bold text-lg mb-6 flex items-center justify-center md:justify-start ${
+                isDark ? 'text-white' : 'text-gray-100'
+              }`}>
                 Quick Links
               </h4>
               <ul className="space-y-3 flex-row justify-center items-center">
@@ -145,14 +165,17 @@ const Footer = () => {
                   <li key={link.id}>
                     <motion.button
                       onClick={link.action}
-                      className="inline group text-gray-400 hover:text-lime-400 transition-all duration-300 cursor-pointer select-none"
+                      className={`inline group transition-all duration-300 cursor-pointer select-none ${
+                        isDark 
+                          ? 'text-gray-300 hover:text-green-400' 
+                          : 'text-gray-400 hover:text-green-400'
+                      }`}
                       whileHover={{ x: 4 }}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
                     >
-                      <span className="w-1.5 h-1.5 bg-gray-600 rounded-full mr-3 group-hover:bg-lime-400 transition-all duration-300"></span>
                       {link.label}
                     </motion.button>
                   </li>
@@ -163,32 +186,56 @@ const Footer = () => {
 
           <motion.div variants={itemVariants} className="flex justify-center md:justify-start">
             <div>
-              <h4 className="font-bold text-lg mb-6 text-white">Get In Touch</h4>
+              <h4 className={`font-bold text-lg mb-6 ${
+                isDark ? 'text-white' : 'text-gray-100'
+              }`}>
+                Get In Touch
+              </h4>
               <div className="flex-row justify-center items-center space-y-4">
                 <motion.a
-                  href="mailto:hello@miravisions.com"
-                  className="flex items-center text-gray-400 hover:text-lime-400 transition-all duration-300 cursor-pointer group"
+                  href="mailto:info@miravisions.com"
+                  className={`flex items-center transition-all duration-300 cursor-pointer group ${
+                    isDark 
+                      ? 'text-gray-300 hover:text-green-400' 
+                      : 'text-gray-400 hover:text-green-400'
+                  }`}
                   whileHover={{ x: 4 }}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center mr-3 group-hover:bg-lime-400/10 transition-all duration-300">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-all duration-300 ${
+                    isDark 
+                      ? 'bg-gray-800 group-hover:bg-green-600/10' 
+                      : 'bg-gray-700 group-hover:bg-green-600/10'
+                  }`}>
                     <Mail className="w-3.5 h-3.5" />
                   </div>
-                  <span className="text-sm">hello@miravisions.com</span>
+                  <span className="text-sm">info@miravisions.com</span>
                 </motion.a>
                 
                 <motion.a
                   href="tel:+15551234567"
-                  className="flex items-center text-gray-400 hover:text-lime-400 transition-all duration-300 cursor-pointer group"
+                  className={`flex items-center transition-all duration-300 cursor-pointer group ${
+                    isDark 
+                      ? 'text-gray-300 hover:text-green-400' 
+                      : 'text-gray-400 hover:text-green-400'
+                  }`}
                   whileHover={{ x: 4 }}
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center mr-3 group-hover:bg-lime-400/10 transition-all duration-300">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 transition-all duration-300 ${
+                    isDark 
+                      ? 'bg-gray-800 group-hover:bg-green-600/10' 
+                      : 'bg-gray-700 group-hover:bg-green-600/10'
+                  }`}>
                     <Phone className="w-3.5 h-3.5" />
                   </div>
                   <span className="text-sm">+x (xxx) xxx-xxxx</span>
                 </motion.a>
                 
-                <div className="flex items-center text-gray-400">
-                  <div className="w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center mr-3">
+                <div className={`flex items-center ${
+                  isDark ? 'text-gray-300' : 'text-gray-400'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${
+                    isDark ? 'bg-gray-800' : 'bg-gray-700'
+                  }`}>
                     <MapPin className="w-3.5 h-3.5" />
                   </div>
                   <span className="text-sm">Worldwide Remote</span>
@@ -199,19 +246,27 @@ const Footer = () => {
         </div>
 
         <motion.div 
-          className="border-t border-gray-800/50 pt-8"
+          className={`border-t pt-8 ${
+            isDark ? 'border-gray-700/50' : 'border-gray-600/30'
+          }`}
           variants={itemVariants}
         >
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            <p className="text-gray-400 text-sm">
+            <p className={`text-sm ${
+              isDark ? 'text-gray-300' : 'text-gray-400'
+            }`}>
               © 2025 Mira Visions. All rights reserved.
             </p>
             
             <div className="flex space-x-6 text-sm">
-              {["Privacy Policy", "Terms of Service", "Cookies"].map((item, index) => (
+              {["Privacy Policy", "Terms of Service"].map((item, index) => (
                 <motion.button
                   key={item}
-                  className="text-gray-400 hover:text-lime-400 transition-colors duration-300 cursor-pointer select-none"
+                  className={`transition-colors duration-300 cursor-pointer select-none ${
+                    isDark 
+                      ? 'text-gray-300 hover:text-green-400' 
+                      : 'text-gray-400 hover:text-green-400'
+                  }`}
                   whileHover={{ y: -1 }}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -226,7 +281,7 @@ const Footer = () => {
           
           <motion.button
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 flex items-center justify-center shadow-lg hover:shadow-xl hover:shadow-lime-400/25 transition-all duration-300 cursor-pointer md:hidden z-500"
+            className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-gradient-to-r from-green-600 to-emerald-500 text-white flex items-center justify-center shadow-lg hover:shadow-xl hover:shadow-green-400/25 transition-all duration-300 cursor-pointer md:hidden z-500"
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0 }}
