@@ -263,11 +263,26 @@ const ProcessSection = () => {
   ];
 
   return (
-    <section className={`py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden ${
-      isDark 
-        ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
-        : 'bg-gradient-to-tr from-white to-slate-200'
-    }`}>
+    <section
+      className={`relative py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden ${
+        isDark 
+          ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+          : 'bg-gradient-to-tr from-white to-slate-200'
+      }`}
+    >
+      {/* grid */}
+      <div
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.08]' : 'opacity-[0.12]'}`}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(34,197,94,0.6) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,197,94,0.6) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px, 50px 50px',
+          pointerEvents: 'none',
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -301,7 +316,9 @@ const ProcessSection = () => {
         </motion.div>
 
         <div className="relative">
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-16">
+            
             {steps.map((step, index) => (
               <motion.div
                 key={step.title}

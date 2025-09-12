@@ -1,6 +1,7 @@
 "use client"
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
+// TODO: add grids
 
 const BrandsSection = () => {
   const { theme } = useTheme();
@@ -25,7 +26,18 @@ const BrandsSection = () => {
         ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
         : 'bg-gradient-to-tr from-white to-slate-200'
     }`}>
-
+      {/* grid */}
+      <div
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.08]' : 'opacity-[0.12]'}`}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(34,197,94,0.6) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,197,94,0.6) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px, 50px 50px',
+          pointerEvents: 'none',
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <motion.div

@@ -80,6 +80,17 @@ const ServicesSection = () => {
           : 'bg-gradient-to-br from-white to-slate-200'
       }`}
     >
+      {/* grid */}
+      <div 
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.04]' : 'opacity-[0.08]'}`}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(34, 197, 94, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34, 197, 94, 0.5) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

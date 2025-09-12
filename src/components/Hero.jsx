@@ -381,7 +381,7 @@ const Hero = ({ isLoaded = true }) => {
             <div className={`flex justify-center lg:justify-start ${isLoaded ? 'opacity-0 translate-y-5 animate-[cta-reveal_0.8s_ease-out_1.4s_both]' : 'opacity-0'}`}>
               <button
                 onClick={() => scrollToSection('contact')}
-                className={`relative overflow-hidden text-gray-800 rounded-full font-bold text-sm sm:text-base md:text-lg lg:text-lg xl:text-lg px-6 py-3 sm:px-8 sm:py-4 lg:px-8 lg:py-4 transition-all duration-500 transform hover:scale-105 group border-none cursor-pointer bg-green-500 hover:shadow-[0_25px_50px_-12px_rgba(34,197,94,0.5)] shadow-[0_0_0_rgba(34,197,94,0.5)]`}
+                className={`relative overflow-hidden ${isDark ? 'white' : 'text-gray-800'} rounded-full font-bold text-sm sm:text-base md:text-lg lg:text-lg xl:text-lg px-6 py-3 sm:px-8 sm:py-4 lg:px-8 lg:py-4 transition-all duration-500 transform hover:scale-105 group border-none cursor-pointer bg-green-500 hover:shadow-[0_25px_50px_-12px_rgba(34,197,94,0.5)] shadow-[0_0_0_rgba(34,197,94,0.5)]`}
               >
                 <span className="relative z-10 flex items-center justify-center">
                   Start Your Project

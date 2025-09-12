@@ -103,24 +103,46 @@ const ContactSection = () => {
     }
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setSubmitStatus('success')
-      setFormData({
-        name: '',
-        email: '',
-        company: '',
-        service: '',
-        message: ''
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          company: formData.company.trim(),
+          service: formData.service,
+          message: formData.message.trim()
+        })
       })
-      setValidationErrors({})
+
+      const result = await response.json()
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          service: '',
+          message: ''
+        })
+        setValidationErrors({})
+        console.log('Contact form submitted successfully:', result)
+      } else {
+        console.error('API Error:', result)
+        setSubmitStatus('error')
+      }
+
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Network Error:', error)
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
     }
   }
+
 
   const inputVariants = {
     focused: { scale: 1.02, transition: { type: "spring", stiffness: 300 } },
@@ -134,7 +156,18 @@ const ContactSection = () => {
         : 'bg-gradient-to-tr from-white to-slate-200'
     }`}>
 
-
+      {/* grid */}
+      <div
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.08]' : 'opacity-[0.12]'}`}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(34,197,94,0.6) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,197,94,0.6) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px, 50px 50px',
+          pointerEvents: 'none',
+        }}
+      />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -412,16 +445,15 @@ const ContactSection = () => {
             className="flex flex-col h-full"
           >
             <div className="flex flex-col justify-between h-full space-y-6">
+              {/* Email Card - Smaller */}
               <motion.div 
                 whileHover={{ scale: 1.02, y: -8 }}
-                className={`p-6 rounded-3xl border flex-1 flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
+                className={`p-6 rounded-3xl border flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
                   isDark 
                     ? 'bg-gray-800 border-gray-700' 
                     : 'bg-white border-gray-100'
                 }`}
               >
-
-                
                 <div className="flex items-center mb-4 relative z-10">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,6 +477,7 @@ const ContactSection = () => {
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </motion.div>
 
+              {/* Quick Response Card - Larger */}
               <motion.div 
                 whileHover={{ scale: 1.02, y: -8 }}
                 className={`p-6 rounded-3xl border flex-1 flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
@@ -453,8 +486,6 @@ const ContactSection = () => {
                     : 'bg-white border-gray-100'
                 }`}
               >
-
-                
                 <div className="flex items-center mb-4 relative z-10">
                   <div className="w-12 h-12 bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -472,6 +503,7 @@ const ContactSection = () => {
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </motion.div>
 
+              {/* Expertise Card - Larger */}
               <motion.div 
                 whileHover={{ scale: 1.02, y: -8 }}
                 className={`p-6 rounded-3xl border flex-1 flex flex-col justify-center shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden group ${
@@ -480,8 +512,6 @@ const ContactSection = () => {
                     : 'bg-white border-gray-100'
                 }`}
               >
-
-                
                 <div className="flex items-center mb-4 relative z-10">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0 shadow-lg">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -507,6 +537,7 @@ const ContactSection = () => {
                     <span className={`font-medium text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Creative Media Solutions</span>
                   </div>
                 </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </motion.div>
             </div>
           </motion.div>

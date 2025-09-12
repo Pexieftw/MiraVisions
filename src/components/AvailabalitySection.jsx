@@ -2,16 +2,30 @@
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 
+// TODO: add grids
 const AvailabilitySection = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
   return (
-    <section className={`py-12 overflow-hidden ${
+    <section className={`relative py-12 overflow-hidden ${
       isDark 
         ? 'bg-gradient-to-br from-slate-900 to-slate-800'
         : 'bg-gradient-to-br from-white to-slate-200'
     }`}>
+
+      {/* grid */}
+      <div
+        className={`absolute inset-0 ${isDark ? 'opacity-[0.08]' : 'opacity-[0.12]'}`}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(34,197,94,0.6) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,197,94,0.6) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px, 50px 50px',
+          pointerEvents: 'none',
+        }}
+      />
       <div className="max-w-7xl mx-auto px-4">
         
         <motion.div

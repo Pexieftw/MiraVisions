@@ -48,23 +48,19 @@ function isValidEmail(email) {
   return emailRegex.test(email)
 }
 
-function createGmailTransporter() {
-  // Check if Gmail is properly configured
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    throw new Error('Gmail configuration missing. Please set EMAIL_USER and EMAIL_PASS environment variables.')
+function createZohoTransporter() {
+  // Check if Zoho is properly configured
+  if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
+    throw new Error('Zoho configuration missing. Please set SMTP_EMAIL and SMTP_PASSWORD environment variables.')
   }
 
-  if (!process.env.EMAIL_USER.includes('@gmail.com')) {
-    throw new Error('EMAIL_USER must be a Gmail address.')
-  }
-
-  console.log('Using Gmail configuration for:', process.env.EMAIL_USER)
-  
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.zoho.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
     tls: {
       rejectUnauthorized: false
@@ -100,7 +96,7 @@ export async function POST(request) {
       body = await request.json()
     } catch (error) {
       return NextResponse.json(
-        { error: ```Invalid JSON in request body: ${error}``` },
+        { error: `Invalid JSON in request body: ${error}` },
         { status: 400 }
       )
     }
@@ -157,7 +153,7 @@ export async function POST(request) {
     if (sanitizedData.message.length > 2000) {
       return NextResponse.json(
         { error: 'Message is too long. Please keep it under 2000 characters.' },
-        { status: 400 }
+        { status: 500 }
       )
     }
 
@@ -167,39 +163,37 @@ export async function POST(request) {
     const hasSpam = spamKeywords.some(keyword => messageContent.includes(keyword))
     
     if (hasSpam) {
-      console.warn('Potential spam detected:', { email: sanitizedData.email, ip })
+      console.warn('⚠️ Potential spam detected:', { email: sanitizedData.email, ip })
       return NextResponse.json({ message: 'Message received successfully.' })
     }
 
-    // Create Gmail transporter
+    // Create Zoho transporter
     let transporter
     try {
-      transporter = createGmailTransporter()
-      console.log('Gmail transporter created successfully')
+      transporter = createZohoTransporter()
     } catch (error) {
-      console.error('Failed to create Gmail transporter:', error)
+      console.error('❌ Failed to create Zoho transporter:', error)
       return NextResponse.json(
-        { error: 'Email configuration error. Please check your Gmail settings.' },
+        { error: 'Email configuration error. Please check your Zoho Mail SMTP settings.' },
         { status: 500 }
       )
     }
 
     try {
       await transporter.verify()
-      console.log('Gmail connection verified successfully')
     } catch (error) {
-      console.error('Gmail connection failed:', error)
+      console.error('❌ Zoho Mail SMTP connection failed:', error)
       
       if (error.code === 'EAUTH') {
-        console.error('Gmail authentication failed. Check your email credentials.')
+        console.error('🔐 Zoho Mail authentication failed. Check your email credentials.')
         return NextResponse.json(
-          { error: 'Gmail authentication failed. Please check your app password.' },
+          { error: 'Zoho Mail authentication failed. Please check your email and app password.' },
           { status: 503 }
         )
       } else {
-        console.error('Gmail verification error:', error.message)
+        console.error('🌐 Zoho Mail SMTP verification error:', error.message)
         return NextResponse.json(
-          { error: 'Gmail service temporarily unavailable. Please try again later.' },
+          { error: 'Zoho Mail SMTP service temporarily unavailable. Please try again later.' },
           { status: 503 }
         )
       }
@@ -207,22 +201,22 @@ export async function POST(request) {
 
     const recipients = process.env.EMAIL_RECIPIENTS 
       ? process.env.EMAIL_RECIPIENTS.split(',').map(email => email.trim())
-      : [process.env.EMAIL_USER] // fallback
+      : ['info@miravisions.com'] // fallback
 
     // Validate recipients
     const validRecipients = recipients.filter(isValidEmail)
     if (validRecipients.length === 0) {
-      console.error('No valid recipients configured')
+      console.error('❌ No valid recipients configured')
       return NextResponse.json(
         { error: 'Email configuration error. Please contact support.' },
         { status: 500 }
       )
     }
 
-    const fromName = process.env.FROM_NAME || 'MiraVision Contact'
-    
+    const fromName = process.env.FROM_NAME || 'MiraVision Contact System'
+
     const mailOptions = {
-      from: `"${fromName}" <${process.env.EMAIL_USER}>`,
+      from: `"${fromName}" <${process.env.SMTP_EMAIL}>`,
       to: validRecipients,
       replyTo: sanitizedData.email,
       subject: `New Contact Form Submission from ${sanitizedData.name}`,
@@ -296,7 +290,7 @@ export async function POST(request) {
 
           <!-- Footer -->
           <div style="border-top: 1px solid #eee; padding-top: 20px; color: #666; font-size: 12px;">
-            <p style="margin: 0;">This message was sent from your website contact form.</p>
+            <p style="margin: 0;">This message was sent from your MiraVision website contact form.</p>
             <p style="margin: 5px 0 0 0;">IP Address: ${ip}</p>
           </div>
 
@@ -316,7 +310,7 @@ MESSAGE
 ${sanitizedData.message}
 
 REPLY TO: ${sanitizedData.email}
-SOURCE: Website Contact Form
+SOURCE: MiraVision Website Contact Form
 IP: ${ip}
 TIMESTAMP: ${new Date().toISOString()}
       `
@@ -329,14 +323,12 @@ TIMESTAMP: ${new Date().toISOString()}
     while (!emailSent && attempts < maxAttempts) {
       try {
         attempts++
-        console.log(`Attempting to send email (attempt ${attempts})...`)
         await transporter.sendMail(mailOptions)
         emailSent = true
-        console.log(`Contact form email sent successfully to ${validRecipients.join(', ')} (attempt ${attempts})`)
       } catch (error) {
-        console.error(`Email sending failed (attempt ${attempts}):`, error)
+        console.error(`❌ Email sending failed via Zoho Mail SMTP (attempt ${attempts}/${maxAttempts}):`, error.message)
         if (attempts >= maxAttempts) {
-          console.error('All email attempts failed:', error)
+          console.error('💀 All Zoho Mail SMTP email attempts failed:', error)
           return NextResponse.json(
             { error: 'Unable to send message at this time. Please try again later.' },
             { status: 503 }
@@ -348,9 +340,8 @@ TIMESTAMP: ${new Date().toISOString()}
 
     if (process.env.SEND_AUTO_REPLY === 'true') {
       try {
-        console.log('Sending auto-reply...')
         await transporter.sendMail({
-          from: `"${fromName}" <${process.env.EMAIL_USER}>`,
+          from: `"${fromName}" <${process.env.SMTP_EMAIL}>`,
           to: sanitizedData.email,
           subject: `Thank you for contacting MiraVision, ${sanitizedData.name}!`,
           html: `
@@ -414,10 +405,11 @@ TIMESTAMP: ${new Date().toISOString()}
             This is an automated response to confirm we received your message.
           `
         })
-        console.log('Auto-reply sent successfully')
       } catch (autoReplyError) {
-        console.warn('Auto-reply failed, but main email was sent:', autoReplyError.message)
+        console.warn('⚠️ Auto-reply failed via Zoho Mail SMTP, but main email was sent:', autoReplyError.message)
       }
+    } else {
+      console.log('Auto-reply is disabled')
     }
 
     return NextResponse.json(
@@ -429,7 +421,12 @@ TIMESTAMP: ${new Date().toISOString()}
     )
 
   } catch (error) {
-    console.error('Unexpected error in contact API:', error)
+    console.error('💥 Unexpected error in contact API:', error)
+    console.error('🔍 Error details:', {
+      message: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    })
     return NextResponse.json(
       { error: 'An unexpected error occurred. Please try again later.' },
       { status: 500 }
