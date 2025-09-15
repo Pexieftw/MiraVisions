@@ -20,64 +20,79 @@ const ProjectsSection = () => {
       name: 'Pure Buys', 
       type: 'E-commerce Design',
       image: '/projects/purebuys.webp',
-      gradient: 'from-blue-500 to-purple-600',
       description: 'Modern e-commerce platform with seamless user experience'
     },
     { 
       name: 'Sauce Harra', 
       type: 'Brand Identity',
       image: '/projects/sauce_harra.webp',
-      gradient: 'from-red-500 to-orange-600',
       description: 'Spicy brand identity that captures authentic flavors'
     },
     { 
       name: 'Rapide Scooter', 
       type: 'Complete Branding',
       image: '/projects/rapied_scooter.webp',
-      gradient: 'from-emerald-500 to-teal-600',
       description: 'Urban mobility solution with dynamic visual identity'
     },
     { 
       name: 'Frizzies', 
       type: 'Visual Identity',
       image: '/projects/frizzies.webp',
-      gradient: 'from-gray-700 to-gray-900',
       description: 'Dark kitchen concept with bold visual storytelling'
     },
     { 
       name: 'Dark Kitchen', 
       type: 'Restaurant Branding',
       image: '/projects/dark_kitchen.webp',
-      gradient: 'from-purple-600 to-pink-600',
       description: 'Innovative ghost kitchen brand with modern delivery focus'
     },
     { 
       name: 'Muslim Blocks', 
       type: 'Platform Design',
       image: '/projects/muslim_blocks.webp',
-      gradient: 'from-green-500 to-emerald-600',
       description: 'Educational platform connecting communities through design'
     },
     { 
       name: 'Tourism Dubai', 
       type: 'Website & Graphics',
       image: '/projects/tourism_dubai.webp',
-      gradient: 'from-amber-500 to-orange-600',
       description: 'Luxury tourism experience with golden visual aesthetics'
     },
     { 
       name: 'Beach Day Every Day', 
       type: 'Corporate Identity',
       image: '/projects/beach_day_every_day.webp',
-      gradient: 'from-indigo-500 to-purple-600',
       description: 'Professional corporate branding with modern approach'
     },
     { 
       name: 'Fritzguard', 
       type: 'Brand & Website',
       image: '/projects/fritzguard.webp',
-      gradient: 'from-slate-600 to-gray-800',
       description: 'Security-focused brand with trustworthy design language'
+    },
+    { 
+      name: 'IDILI', 
+      type: '3D & Brand Identity',
+      image: '/projects/idili_work.webp',
+      description: 'The #1 natural brand, powered by prickly pear seed oil from a 100% women’s cooperative.'
+    },
+    { 
+      name: 'NUARAI', 
+      type: '3D & Brand Identity',
+      image: '/projects/nuarai_work.webp',
+      description: 'Luxury bakhoor inspired by iconic perfumes, crafted with timeless elegance.'
+    },
+    { 
+      name: 'ROC', 
+      type: '3D & Website Creation',
+      image: '/projects/roc_work.webp',
+      description: 'Post-graft care powered by pure ingredients for strength and confidence.'
+    },
+    { 
+      name: 'Vitaminface', 
+      type: 'Website Creation',
+      image: '/projects/vitamine_face_work.webp',
+      description: 'Vitamin-rich skincare and nutrition for radiant, healthy skin.'
     }
   ];
 
