@@ -16,6 +16,31 @@ const ProjectsSection = () => {
   const touchStartRef = useRef(null);
 
   const brands = [
+
+    { 
+      name: 'IDILI', 
+      type: '3D & Brand Identity',
+      image: '/projects/idili_work.webp',
+      description: 'The #1 natural brand, powered by prickly pear seed oil from a 100% women’s cooperative.'
+    },
+    { 
+      name: 'NUARAI', 
+      type: '3D & Brand Identity',
+      image: '/projects/nuarai_work.webp',
+      description: 'Luxury bakhoor inspired by iconic perfumes, crafted with timeless elegance.'
+    },
+    { 
+      name: 'ROC', 
+      type: '3D & Website Creation',
+      image: '/projects/roc_work.webp',
+      description: 'Post-graft care powered by pure ingredients for strength and confidence.'
+    },
+    { 
+      name: 'Vitaminface', 
+      type: 'Website Creation',
+      image: '/projects/vitamine_face_work.webp',
+      description: 'Vitamin-rich skincare and nutrition for radiant, healthy skin.'
+    },
     { 
       name: 'Pure Buys', 
       type: 'E-commerce Design',
@@ -69,30 +94,6 @@ const ProjectsSection = () => {
       type: 'Brand & Website',
       image: '/projects/fritzguard.webp',
       description: 'Security-focused brand with trustworthy design language'
-    },
-    { 
-      name: 'IDILI', 
-      type: '3D & Brand Identity',
-      image: '/projects/idili_work.webp',
-      description: 'The #1 natural brand, powered by prickly pear seed oil from a 100% women’s cooperative.'
-    },
-    { 
-      name: 'NUARAI', 
-      type: '3D & Brand Identity',
-      image: '/projects/nuarai_work.webp',
-      description: 'Luxury bakhoor inspired by iconic perfumes, crafted with timeless elegance.'
-    },
-    { 
-      name: 'ROC', 
-      type: '3D & Website Creation',
-      image: '/projects/roc_work.webp',
-      description: 'Post-graft care powered by pure ingredients for strength and confidence.'
-    },
-    { 
-      name: 'Vitaminface', 
-      type: 'Website Creation',
-      image: '/projects/vitamine_face_work.webp',
-      description: 'Vitamin-rich skincare and nutrition for radiant, healthy skin.'
     }
   ];
 
@@ -145,9 +146,9 @@ const ProjectsSection = () => {
   };
 
   return (
-    <section id="portfolio" className={`relative py-16 sm:py-20 lg:py-24 bg-gradient-to-bl overflow-hidden  ${
-        isDark           ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
-          : 'bg-gradient-to-tr from-white to-slate-200'
+    <section id="portfolio" className={`relative py-8 sm:py-10 lg:py-12 bg-gradient-to-bl overflow-hidden  ${
+        isDark  ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+                : 'bg-gradient-to-tr from-white to-slate-200'
 
       }`}>
                 

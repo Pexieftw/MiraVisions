@@ -151,9 +151,9 @@ const ContactSection = () => {
 
   return (
     <section id="contact" className={`relative py-10 lg:py-14 overflow-hidden ${
-      isDark 
-        ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
-        : 'bg-gradient-to-tr from-white to-slate-200'
+        isDark 
+          ? 'bg-gradient-to-br from-slate-900 to-slate-800'
+          : 'bg-gradient-to-br from-white to-slate-200'
     }`}>
 
       {/* grid */}
@@ -368,10 +368,11 @@ const ContactSection = () => {
                     onChange={handleInputChange}
                     onFocus={() => setFocusedField('message')}
                     onBlur={() => setFocusedField(null)}
+                    key={theme}
                     className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-base resize-none min-h-[120px] ${
                       isDark 
-                        ? 'bg-gray-700/70 text-white' 
-                        : 'bg-gray-50/70 text-gray-900'
+                          ? 'bg-gray-700/70 text-white placeholder-gray-400'
+                          : 'bg-gray-50/70 text-gray-900 placeholder-gray-500'}
                     } ${
                       validationErrors.message 
                         ? 'border-red-400 focus:border-red-400' 

@@ -5,14 +5,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Mail, Sun, Moon } from 'lucide-react';
 import Image from "next/image";
 import { useTheme } from '@/contexts/ThemeContext';
+import Link from "next/link";
+import { useRouter, usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isManualScrolling, setIsManualScrolling] = useState(false);
   const [isClient, setIsClient] = useState(false);
+
+  // Check if we're on the homepage
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     setIsClient(true);
@@ -64,66 +71,99 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      if (isManualScrolling) return;
+      // Only do section detection on homepage
+      if (!isHomePage || isManualScrolling) return;
 
       const sections = ['hero', 'services', 'portfolio', 'testimonials', 'contact'];
       let current = activeSection; 
 
-      sections.forEach(sectionId => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150 && rect.bottom >= 150) {
-            current = sectionId === 'hero' ? 'home' : sectionId;
+      // Check if we're at the very top of the page first
+      if (window.scrollY < 100) {
+        current = 'home';
+      } else {
+        sections.forEach(sectionId => {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= 200 && rect.bottom >= 100) {
+              current = sectionId === 'hero' ? 'home' : sectionId;
+            }
           }
-        }
-      });
+        });
+      }
 
-      setActiveSection(current);
+      if (current !== activeSection) {
+        setActiveSection(current);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll();
+    handleScroll(); 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isManualScrolling, activeSection]);
+  }, [isManualScrolling, activeSection, isHomePage]);
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      setIsManualScrolling(true); 
-      setActiveSection(sectionId);
-
-      const headerOffset = 80;
-      const elementPosition = element.offsetTop;
-      const offsetPosition = elementPosition - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-
-      setIsMobileMenuOpen(false);
-
+  // Navigation functions
+  const navigateToHome = () => {
+    if (isHomePage) {
+      // If on homepage, scroll to top
+      setIsManualScrolling(true);
+      setActiveSection('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => setIsManualScrolling(false), 800);
+    } else {
+      // If on other page, navigate to homepage
+      router.push('/');
     }
-  };
-
-  const scrollToTop = () => {
-    setIsManualScrolling(true);
-    setActiveSection('home');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMobileMenuOpen(false);
-
-    setTimeout(() => setIsManualScrolling(false), 800);
   };
+
+  const navigateToSection = (sectionId) => {
+    if (isHomePage) {
+      // If on homepage, scroll to section
+      const element = document.getElementById(sectionId);
+      if (element) {
+        setIsManualScrolling(true); 
+        setActiveSection(sectionId);
+
+        const headerOffset = 80;
+        const elementPosition = element.offsetTop;
+        const offsetPosition = elementPosition - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+
+        setTimeout(() => setIsManualScrolling(false), 800);
+      }
+    } else {
+      // If on other page, navigate to homepage with hash
+      router.push(`/#${sectionId}`);
+    }
+    setIsMobileMenuOpen(false);
+  };
+
+  // Handle navigation from hash on homepage load
+  useEffect(() => {
+    if (isHomePage && window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const sections = ['hero', 'services', 'portfolio', 'testimonials', 'contact'];
+      
+      if (sections.includes(hash)) {
+        // Small delay to ensure page is loaded
+        setTimeout(() => {
+          navigateToSection(hash);
+        }, 100);
+      }
+    }
+  }, [isHomePage]);
 
   const navigationItems = [
-    { id: 'home', label: 'Home', action: scrollToTop },
-    { id: 'portfolio', label: 'Portfolio', action: () => { setActiveSection('portfolio'); scrollToSection('portfolio'); } },
-    { id: 'services', label: 'Services', action: () => { setActiveSection('services'); scrollToSection('services'); } },
-    { id: 'testimonials', label: 'Reviews', action: () => { setActiveSection('testimonials'); scrollToSection('testimonials'); } },
-    { id: 'contact', label: 'Contact', action: () => { setActiveSection('contact'); scrollToSection('contact'); } }
+    { id: 'home', label: 'Home', action: navigateToHome },
+    { id: 'portfolio', label: 'Portfolio', action: () => navigateToSection('portfolio') },
+    { id: 'services', label: 'Services', action: () => navigateToSection('services') },
+    { id: 'testimonials', label: 'Reviews', action: () => navigateToSection('testimonials') },
+    { id: 'contact', label: 'Contact', action: () => navigateToSection('contact') }
   ];
 
   return (
@@ -142,11 +182,10 @@ const Navbar = () => {
             
             <motion.div 
               className="flex items-center space-x-2 lg:space-x-3 cursor-pointer group"
-              onClick={scrollToTop}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="flex items-center relative">
+              <Link href="/" className="flex items-center relative">
                 <Image
                   src="/miravisions-logo-white.webp"
                   alt="Mira Visions Logo"
@@ -167,7 +206,7 @@ const Navbar = () => {
                   }`}
                   priority
                 />
-              </div>
+              </Link>
             </motion.div>
 
             <div className="hidden lg:flex items-center space-x-1" suppressHydrationWarning>
@@ -176,7 +215,7 @@ const Navbar = () => {
                   key={item.id}
                   onClick={item.action}
                   className={`relative px-5 py-2.5 rounded-xl font-medium text-sm xl:text-base transition-all duration-300 group cursor-pointer select-none ${
-                    activeSection === item.id
+                    (isHomePage && activeSection === item.id) || (!isHomePage && item.id === 'home')
                       ? `${styles.textPrimary} font-black`
                       : `${styles.textPrimary} ${styles.textHover} ${styles.buttonHover}`
                   }`}
@@ -188,7 +227,7 @@ const Navbar = () => {
                 >
                   <span className="relative z-10">{item.label}</span>
                   
-                  {activeSection === item.id && (
+                  {((isHomePage && activeSection === item.id) || (!isHomePage && item.id === 'home')) && (
                     <motion.div
                       layoutId="activeIndicator"
                       className="absolute bottom-0 left-1/2 w-1.5 h-1.5 bg-green-600 rounded-full transform -translate-x-1/2 shadow-lg shadow-lime-400/50"
@@ -252,7 +291,7 @@ const Navbar = () => {
               </div>
 
               <motion.button
-                onClick={() => scrollToSection('contact')}
+                onClick={() => navigateToSection('contact')}
                 className={`${styles.greenButtonBg} ${styles.greenButtonText} relative overflow-hidden px-6 py-2.5 hover:shadow-[0_25px_50px_-12px_rgba(34,197,94,0.5)] shadow-[0_0_0_rgba(34,197,94,0.5)] rounded-xl font-bold text-sm xl:text-base transition-all duration-300 cursor-pointer select-none`}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -333,7 +372,7 @@ const Navbar = () => {
                       key={item.id}
                       onClick={item.action}
                       className={`w-full text-left px-4 py-3 rounded-xl font-medium text-base transition-all duration-300 cursor-pointer select-none ${
-                        activeSection === item.id
+                        (isHomePage && activeSection === item.id) || (!isHomePage && item.id === 'home')
                           ? 'text-green-600 shadow-lg border-2 border-green-600/20'
                           : `${styles.textPrimary} ${styles.textHover} ${styles.mobileButtonHover}`
                       }`}
@@ -345,7 +384,7 @@ const Navbar = () => {
                     >
                       <div className="flex items-center justify-between">
                         <span>{item.label}</span>
-                        {activeSection === item.id && (
+                        {((isHomePage && activeSection === item.id) || (!isHomePage && item.id === 'home')) && (
                           <motion.div
                             initial={{ scale: 0, rotate: -180 }}
                             animate={{ scale: 1, rotate: 0 }}
@@ -416,7 +455,7 @@ const Navbar = () => {
                 </div>
                 
                 <motion.button
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => navigateToSection('contact')}
                   className={`w-full px-6 py-4 bg-green-600 rounded-xl font-bold text-center transition-all duration-300 hover:from-lime-500 hover:to-emerald-600 shadow-lg hover:shadow-xl hover:shadow-lime-400/25 cursor-pointer select-none ${styles.iconButtonText}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}

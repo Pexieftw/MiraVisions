@@ -9,7 +9,7 @@ const TestimonialsSection = () => {
   const testimonials = [
     {
       name: 'Abdellah Z',
-      company: 'Rapide Scooter',
+      company: 'Multiple Brands',
       role: 'CEO & Founder',
       image: '/testimonials/picture1.webp',
       quote: 'Mira Visions transformed our startup idea into a compelling brand identity. Their creative approach and attention to detail exceeded our expectations.',
@@ -47,9 +47,8 @@ const TestimonialsSection = () => {
 
   return (
     <section id="testimonials" className={`relative py-8 sm:py-10 lg:py-14 overflow-hidden ${
-      isDark 
-        ? 'bg-gradient-to-br from-slate-900 to-slate-800'
-        : 'bg-gradient-to-br from-white to-slate-200'
+        isDark  ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+                : 'bg-gradient-to-tr from-white to-slate-200'
     }`}>
 
       {/* grid */}

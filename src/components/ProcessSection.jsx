@@ -266,8 +266,8 @@ const ProcessSection = () => {
     <section
       className={`relative py-12 sm:py-16 md:py-20 lg:py-28 overflow-hidden ${
         isDark 
-          ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
-          : 'bg-gradient-to-tr from-white to-slate-200'
+          ? 'bg-gradient-to-br from-slate-900 to-slate-800'
+          : 'bg-gradient-to-br from-white to-slate-200'
       }`}
     >
       {/* grid */}

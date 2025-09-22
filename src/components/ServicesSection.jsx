@@ -26,6 +26,7 @@ const ServicesSection = () => {
       ],
       image:
         "/services/website_creation.webp",
+      mediaType: "image"
     },
     {
       title: "Graphic Design",
@@ -41,6 +42,7 @@ const ServicesSection = () => {
       ],
       image:
         "/services/graphic_design.webp",
+      mediaType: "image"
     },
     {
       title: "Brand Identity",
@@ -56,6 +58,7 @@ const ServicesSection = () => {
       ],
       image:
         "/services/brand_identity.webp",
+      mediaType: "image"
     },
     {
       title: "Creative Media",
@@ -65,19 +68,53 @@ const ServicesSection = () => {
       icon: Video,
       features: ["3D Design", "Motion Graphics", "Video Editing", "Animation"],
       image:
-        "/services/creative_media.webp",
+        "/services/Timeline 1.webm",
+      mediaType: "video"
     },
   ];
 
   const ActiveIcon = services[activeService].icon;
 
+  const MediaComponent = ({ service, className }) => {
+    if (service.mediaType === "video") {
+      return (
+        <video
+          src={service.image}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={className}
+          style={{
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+        />
+      );
+    }
+
+    return (
+      <Image
+        src={service.image}
+        alt={service.title}
+        fill  
+        className={className}
+        priority 
+        sizes="(max-width: 768px) 100vw,
+              (max-width: 1200px) 50vw,
+              33vw" 
+      />
+    );
+  };
+
   return (
     <section
       id="services"
       className={`py-16 sm:py-20 lg:py-24 relative overflow-hidden ${
-        isDark 
-          ? 'bg-gradient-to-br from-slate-900 to-slate-800'
-          : 'bg-gradient-to-br from-white to-slate-200'
+        isDark  ? 'bg-gradient-to-tr from-slate-900 to-slate-800'
+                : 'bg-gradient-to-tr from-white to-slate-200'
+
       }`}
     >
       {/* grid */}
@@ -234,15 +271,9 @@ const ServicesSection = () => {
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.4 }}
                   >
-                    <Image
-                      src={services[activeService].image}
-                      alt={services[activeService].title}
-                      fill  
+                    <MediaComponent 
+                      service={services[activeService]}
                       className="object-cover rounded-2xl"
-                      priority 
-                      sizes="(max-width: 768px) 100vw,
-                            (max-width: 1200px) 50vw,
-                            33vw" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent rounded-2xl" />
                   </motion.div>

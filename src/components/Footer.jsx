@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
 import Image from "next/image";
 import { useTheme } from '@/contexts/ThemeContext';
+import Link from "next/link";
+
 
 const Footer = () => {
   const { theme } = useTheme();
@@ -259,22 +261,29 @@ const Footer = () => {
             </p>
             
             <div className="flex space-x-6 text-sm">
-              {["Privacy Policy", "Terms of Service"].map((item, index) => (
-                <motion.button
-                  key={item}
-                  className={`transition-colors duration-300 cursor-pointer select-none ${
-                    isDark 
-                      ? 'text-gray-300 hover:text-green-400' 
-                      : 'text-gray-400 hover:text-green-400'
-                  }`}
+              {[
+                { label: "Privacy Policy", href: "/privacy-policy" },
+                { label: "Terms of Service", href: "/terms-service" },
+              ].map((item, index) => (
+                <motion.div
+                  key={item.href}
                   whileHover={{ y: -1 }}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  {item}
-                </motion.button>
+                  <Link
+                    href={item.href}
+                    className={`transition-colors duration-300 cursor-pointer select-none ${
+                      isDark
+                        ? "text-gray-300 hover:text-green-400"
+                        : "text-gray-400 hover:text-green-400"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>
